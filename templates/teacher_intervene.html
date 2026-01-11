@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Can thiệp Tư vấn - Giáo viên</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            padding: 1.2rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+        }
+        
+        .navbar h1 {
+            font-size: 1.5rem;
+        }
+        
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.2);
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        
+        .navbar a:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+        
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.5rem;
+            background: white;
+            color: #e74c3c;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .back-button:hover {
+            transform: translateX(-3px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .card h2 {
+            color: #2c3e50;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .student-banner {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffe8a1 100%);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            border-left: 5px solid #f39c12;
+        }
+        
+        .student-banner h3 {
+            color: #856404;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+        
+        .student-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        .info-box {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+        }
+        
+        .info-box strong {
+            display: block;
+            color: #666;
+            font-size: 0.85rem;
+            margin-bottom: 0.3rem;
+        }
+        
+        .info-box p {
+            color: #2c3e50;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: #e0e0e0;
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+        
+        .timeline-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2.55rem;
+            top: 1.5rem;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid;
+            z-index: 1;
+        }
+        
+        .timeline-item.status-normal::before {
+            border-color: #27ae60;
+        }
+        
+        .timeline-item.status-monitor::before {
+            border-color: #f39c12;
+        }
+        
+        .timeline-item.status-danger::before {
+            border-color: #e74c3c;
+        }
+        
+        .timeline-item.status-normal {
+            border-left: 4px solid #27ae60;
+        }
+        
+        .timeline-item.status-monitor {
+            border-left: 4px solid #f39c12;
+        }
+        
+        .timeline-item.status-danger {
+            border-left: 4px solid #e74c3c;
+            background: #fff5f5;
+        }
+        
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .status-badge {
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        
+        .status-badge.normal {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-badge.monitor {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-badge.danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .message-content {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.8rem;
+        }
+        
+        .message-content strong {
+            display: block;
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .message-content p {
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+        
+        .timestamp {
+            color: #95a5a6;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+        }
+        
+        .action-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            color: white;
+            margin-top: 2rem;
+        }
+        
+        .action-section h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .action-list {
+            background: rgba(255,255,255,0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .action-list ul {
+            list-style: none;
+        }
+        
+        .action-list li {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .action-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .action-list li::before {
+            content: '✓';
+            display: inline-block;
+            width: 25px;
+            height: 25px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 25px;
+            margin-right: 0.8rem;
+        }
+        
+        .contact-info {
+            background: rgba(255,255,255,0.15);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+            text-align: center;
+        }
+        
+        .contact-info h4 {
+            font-size: 1.2rem;
+            margin-bottom: 0.8rem;
+        }
+        
+        .contact-info p {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <h1>🚑 Can thiệp Tâm lý Khẩn cấp</h1>
+        <div class="navbar-right">
+            <span>{{ session.name }}</span>
+            <a href="{{ url_for('logout') }}">Đăng xuất</a>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <a href="{{ url_for('teacher_dashboard') }}" class="back-button">
+            ← Quay lại danh sách cảnh báo
+        </a>
+        
+        <div class="card">
+            <h2>👨‍⚕️ Hồ sơ Can thiệp</h2>
+            
+            <div class="student-banner">
+                <h3>📋 Thông tin Học sinh</h3>
+                <div class="student-info-grid">
+                    <div class="info-box">
+                        <strong>Mã số</strong>
+                        <p>{{ student_id }}</p>
+                    </div>
+                    <div class="info-box">
+                        <strong>Họ và tên</strong>
+                        <p>{{ student_info.name }}</p>
+                    </div>
+                    <div class="info-box">
+                        <strong>Lớp</strong>
+                        <p>{{ student_info.class }}</p>
+                    </div>
+                    <div class="info-box">
+                        <strong>Số điện thoại</strong>
+                        <p>📞 {{ student_info.phone }}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <h3 style="color: #2c3e50; margin-bottom: 1.5rem;">📜 Lịch sử Trò chuyện</h3>
+            
+            <div class="timeline">
+                {% for conv in conversation %}
+                <div class="timeline-item status-{{ conv.status }}">
+                    <div class="message-header">
+                        <span class="status-badge {{ conv.status }}">{{ conv.status }}</span>
+                        <span class="timestamp">{{ conv.timestamp }}</span>
+                    </div>
+                    
+                    <div class="message-content">
+                        <strong>💬 Tin nhắn học sinh:</strong>
+                        <p>"{{ conv.student_message }}"</p>
+                    </div>
+                    
+                    <div class="message-content">
+                        <strong>🤖 Phản hồi AI:</strong>
+                        <p>{{ conv.bot_response }}</p>
+                    </div>
+                    
+                    {% if conv.status != 'normal' %}
+                    <div style="margin-top: 1rem; padding: 1rem; background: rgba(0,0,0,0.03); border-radius: 8px;">
+                        <strong style="color: #{% if conv.status == 'danger' %}e74c3c{% else %}f39c12{% endif %};">
+                            🔍 Phân tích:
+                        </strong>
+                        <p style="margin-top: 0.5rem; color: #666;">{{ conv.reason }}</p>
+                        {% if conv.keywords %}
+                        <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+                            <strong>Từ khóa:</strong> {{ conv.keywords|join(', ') }}
+                        </p>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="action-section">
+            <h3>🎯 Hướng dẫn Can thiệp</h3>
+            <div class="action-list">
+                <ul>
+                    <li>Liên hệ ngay với học sinh qua số điện thoại để đánh giá tình hình</li>
+                    <li>Lắng nghe tích cực, thể hiện sự đồng cảm và không phán xét</li>
+                    <li>Đánh giá mức độ nguy hiểm và ý định tự hại</li>
+                    <li>Thông báo cho phụ huynh nếu cần thiết</li>
+                    <li>Lên kế hoạch tư vấn dài hạn và theo dõi sát sao</li>
+                    <li>Ghi chép đầy đủ quá trình can thiệp</li>
+                </ul>
+            </div>
+            
+            <div class="contact-info">
+                <h4>📱 Liên hệ trực tiếp</h4>
+                <p>{{ student_info.phone }}</p>
+                <p style="font-size: 1rem; margin-top: 0.5rem; opacity: 0.9;">
+                    Gọi điện hoặc nhắn tin cho học sinh ngay để hỗ trợ kịp thời
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

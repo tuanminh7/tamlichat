@@ -1,0 +1,306 @@
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Hệ thống Giám sát Tâm lý{% endblock %}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; }
+        .navbar { background: #2c3e50; color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .navbar h1 { font-size: 1.5rem; }
+        .navbar a { color: white; text-decoration: none; margin-left: 1rem; }
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
+        .btn { padding: 0.75rem 1.5rem; border: none; border-radius: 5px; cursor: pointer; font-size: 1rem; text-decoration: none; display: inline-block; }
+        .btn-primary { background: #3498db; color: white; }
+        .btn-danger { background: #e74c3c; color: white; }
+        .btn-success { background: #27ae60; color: white; }
+        .btn:hover { opacity: 0.9; }
+        .card { background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 1rem; }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: bold; }
+        .form-group input, .form-group select { width: 100%; padding: 0.75rem; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem; }
+        .alert { padding: 1rem; border-radius: 5px; margin-bottom: 1rem; }
+        .alert-danger { background: #fee; color: #c33; border: 1px solid #fcc; }
+        .alert-warning { background: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
+        .alert-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    {% if session.user_id %}
+    <nav class="navbar">
+        <h1>🧠 Hệ thống Giám sát Tâm lý Học sinh</h1>
+        <div>
+            <span>Xin chào, {{ session.name }}</span>
+            <a href="{{ url_for('logout') }}">Đăng xuất</a>
+        </div>
+    </nav>
+    {% endif %}
+    
+    {% block content %}{% endblock %}
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
+
+<!-- templates/login.html -->
+{% extends "base.html" %}
+{% block title %}Đăng nhập{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="card" style="max-width: 400px; margin: 4rem auto;">
+        <h2 style="text-align: center; margin-bottom: 2rem;">Đăng nhập</h2>
+        {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+        {% endif %}
+        <form method="POST">
+            <div class="form-group">
+                <label>Tài khoản</label>
+                <input type="text" name="user_id" required>
+            </div>
+            <div class="form-group">
+                <label>Mật khẩu</label>
+                <input type="password" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Đăng nhập</button>
+        </form>
+        <p style="text-align: center; margin-top: 1rem;">
+            Học sinh chưa có tài khoản? <a href="{{ url_for('register') }}">Đăng ký ngay</a>
+        </p>
+    </div>
+</div>
+{% endblock %}
+
+<!-- templates/register.html -->
+{% extends "base.html" %}
+{% block title %}Đăng ký{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="card" style="max-width: 400px; margin: 4rem auto;">
+        <h2 style="text-align: center; margin-bottom: 2rem;">Đăng ký tài khoản học sinh</h2>
+        {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+        {% endif %}
+        <form method="POST">
+            <div class="form-group">
+                <label>Tài khoản (MSSV)</label>
+                <input type="text" name="user_id" required>
+            </div>
+            <div class="form-group">
+                <label>Mật khẩu</label>
+                <input type="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label>Họ và tên</label>
+                <input type="text" name="name" required>
+            </div>
+            <div class="form-group">
+                <label>Lớp</label>
+                <input type="text" name="class" required>
+            </div>
+            <div class="form-group">
+                <label>Số điện thoại</label>
+                <input type="tel" name="phone" required placeholder="0123456789">
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Đăng ký</button>
+        </form>
+        <p style="text-align: center; margin-top: 1rem;">
+            Đã có tài khoản? <a href="{{ url_for('login') }}">Đăng nhập</a>
+        </p>
+    </div>
+</div>
+{% endblock %}
+
+<!-- templates/student_dashboard.html -->
+{% extends "base.html" %}
+{% block title %}Tư vấn tâm lý{% endblock %}
+{% block extra_css %}
+<style>
+    .chat-container { max-width: 800px; margin: 0 auto; }
+    .chat-box { height: 500px; overflow-y: auto; padding: 1rem; background: #f9f9f9; border-radius: 10px; margin-bottom: 1rem; }
+    .message { margin-bottom: 1rem; padding: 1rem; border-radius: 10px; max-width: 70%; }
+    .message.student { background: #3498db; color: white; margin-left: auto; }
+    .message.bot { background: white; }
+    .chat-input { display: flex; gap: 1rem; }
+    .chat-input input { flex: 1; }
+</style>
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="chat-container">
+        <div class="card">
+            <h2>💬 Tư vấn tâm lý</h2>
+            <p style="color: #666; margin-bottom: 1rem;">Hãy chia sẻ những suy nghĩ và cảm xúc của bạn. Chúng tôi luôn sẵn sàng lắng nghe.</p>
+            <div id="chatBox" class="chat-box">
+                <div class="message bot">
+                    <strong>Chuyên viên tâm lý</strong>
+                    <p>Xin chào! Tôi là trợ lý tâm lý của trường. Bạn có thể chia sẻ bất cứ điều gì đang khiến bạn lo lắng hoặc muốn tâm sự. Mọi thông tin sẽ được bảo mật.</p>
+                </div>
+            </div>
+            <div class="chat-input">
+                <input type="text" id="messageInput" placeholder="Nhập tin nhắn của bạn..." onkeypress="if(event.key==='Enter') sendMessage()">
+                <button class="btn btn-primary" onclick="sendMessage()">Gửi</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script>
+async function sendMessage() {
+    const input = document.getElementById('messageInput');
+    const message = input.value.trim();
+    if (!message) return;
+    
+    const chatBox = document.getElementById('chatBox');
+    chatBox.innerHTML += `
+        <div class="message student">
+            <strong>Bạn</strong>
+            <p>${message}</p>
+        </div>
+    `;
+    
+    input.value = '';
+    chatBox.scrollTop = chatBox.scrollHeight;
+    
+    const response = await fetch('/student/chat', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({message})
+    });
+    
+    const data = await response.json();
+    chatBox.innerHTML += `
+        <div class="message bot">
+            <strong>Chuyên viên tâm lý</strong>
+            <p>${data.response}</p>
+        </div>
+    `;
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+</script>
+{% endblock %}
+
+<!-- templates/teacher_dashboard.html -->
+{% extends "base.html" %}
+{% block title %}Giáo viên - Cảnh báo{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="card">
+        <h2>⚠️ Cảnh báo nguy hiểm - Can thiệp ngay</h2>
+        {% if alerts %}
+            {% for alert in alerts %}
+            <div class="alert alert-danger" style="margin-top: 1rem;">
+                <h3>🚨 Học sinh cần can thiệp khẩn cấp</h3>
+                <p><strong>Họ tên:</strong> {{ alert.student_info.name }}</p>
+                <p><strong>Lớp:</strong> {{ alert.student_info.class }}</p>
+                <p><strong>Số điện thoại:</strong> {{ alert.student_info.phone }}</p>
+                <p><strong>Thời gian:</strong> {{ alert.timestamp }}</p>
+                <p><strong>Nội dung:</strong> {{ alert.message }}</p>
+                <p><strong>Phân tích:</strong> {{ alert.analysis.reason }}</p>
+                <p><strong>Từ khóa:</strong> {{ alert.analysis.keywords|join(', ') }}</p>
+                <a href="{{ url_for('teacher_intervene', student_id=alert.student_id) }}" class="btn btn-danger">Can thiệp ngay</a>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p style="color: #27ae60;">✅ Hiện tại không có cảnh báo nào</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+<!-- templates/teacher_intervene.html -->
+{% extends "base.html" %}
+{% block title %}Can thiệp tư vấn{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="card">
+        <h2>👨‍⚕️ Can thiệp tư vấn trực tiếp</h2>
+        <div class="alert alert-warning">
+            <p><strong>Học sinh:</strong> {{ student_info.name }}</p>
+            <p><strong>Lớp:</strong> {{ student_info.class }}</p>
+            <p><strong>Số điện thoại:</strong> {{ student_info.phone }}</p>
+        </div>
+        <h3>Lịch sử trò chuyện:</h3>
+        {% for conv in conversation %}
+        <div style="border-left: 3px solid #{% if conv.status == 'danger' %}e74c3c{% elif conv.status == 'monitor' %}f39c12{% else %}27ae60{% endif %}; padding-left: 1rem; margin: 1rem 0;">
+            <p><strong>Học sinh:</strong> {{ conv.student_message }}</p>
+            <p><strong>Trạng thái:</strong> 
+                <span style="color: #{% if conv.status == 'danger' %}e74c3c{% elif conv.status == 'monitor' %}f39c12{% else %}27ae60{% endif %};">
+                    {{ conv.status }}
+                </span>
+            </p>
+            <p style="font-size: 0.9rem; color: #666;">{{ conv.timestamp }}</p>
+        </div>
+        {% endfor %}
+        <p style="margin-top: 2rem;">Liên hệ trực tiếp với học sinh qua điện thoại hoặc gặp mặt để tư vấn.</p>
+    </div>
+</div>
+{% endblock %}
+
+<!-- templates/admin_dashboard.html -->
+{% extends "base.html" %}
+{% block title %}Quản lý - Thống kê{% endblock %}
+{% block extra_css %}
+<style>
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 2rem; }
+    .stat-card { background: white; padding: 2rem; border-radius: 10px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    .stat-card h3 { font-size: 3rem; margin: 1rem 0; }
+    .stat-normal { border-top: 4px solid #27ae60; }
+    .stat-monitor { border-top: 4px solid #f39c12; }
+    .stat-danger { border-top: 4px solid #e74c3c; }
+    .student-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; margin-top: 1rem; }
+    .student-item { padding: 1rem; background: #f9f9f9; border-radius: 5px; text-align: center; }
+</style>
+{% endblock %}
+{% block content %}
+<div class="container">
+    <h2>📊 Thống kê tâm lý học sinh</h2>
+    <div class="stats">
+        <div class="stat-card stat-normal">
+            <p>Bình thường</p>
+            <h3>{{ stats.normal }}</h3>
+        </div>
+        <div class="stat-card stat-monitor">
+            <p>Theo dõi</p>
+            <h3>{{ stats.monitor }}</h3>
+        </div>
+        <div class="stat-card stat-danger">
+            <p>Nguy hiểm</p>
+            <h3>{{ stats.danger }}</h3>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3 style="color: #27ae60;">✅ Bình thường ({{ stats.normal }})</h3>
+        <div class="student-list">
+            {% for student in students.normal %}
+            <div class="student-item">ID: {{ student.id }}</div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="card">
+        <h3 style="color: #f39c12;">⚠️ Theo dõi ({{ stats.monitor }})</h3>
+        <div class="student-list">
+            {% for student in students.monitor %}
+            <div class="student-item">ID: {{ student.id }}</div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="card">
+        <h3 style="color: #e74c3c;">🚨 Nguy hiểm ({{ stats.danger }})</h3>
+        {% for student in students.danger %}
+        <div class="alert alert-danger">
+            <p><strong>ID:</strong> {{ student.id }}</p>
+            <p><strong>Họ tên:</strong> {{ student.info.name }}</p>
+            <p><strong>Lớp:</strong> {{ student.info.class }}</p>
+            <p><strong>Số điện thoại:</strong> {{ student.info.phone }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

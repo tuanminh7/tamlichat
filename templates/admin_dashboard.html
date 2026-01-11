@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý - Thống kê Tâm lý</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 1.2rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .navbar h1 {
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        .navbar-right span {
+            font-size: 0.95rem;
+        }
+        
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.1);
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        
+        .navbar a:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+        
+        .page-header {
+            margin-bottom: 2rem;
+        }
+        
+        .page-header h2 {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-header p {
+            color: #7f8c8d;
+            font-size: 1rem;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .stat-normal::before { background: linear-gradient(90deg, #27ae60, #2ecc71); }
+        .stat-monitor::before { background: linear-gradient(90deg, #f39c12, #f1c40f); }
+        .stat-danger::before { background: linear-gradient(90deg, #e74c3c, #c0392b); }
+        
+        .stat-card .icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-card h3 {
+            font-size: 3.5rem;
+            margin: 0.5rem 0;
+            font-weight: 700;
+        }
+        
+        .stat-normal h3 { color: #27ae60; }
+        .stat-monitor h3 { color: #f39c12; }
+        .stat-danger h3 { color: #e74c3c; }
+        
+        .stat-card p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+        }
+        
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .student-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .student-item {
+            padding: 1.2rem;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 600;
+            color: #495057;
+            border: 2px solid #dee2e6;
+            transition: all 0.3s;
+        }
+        
+        .student-item:hover {
+            transform: scale(1.05);
+            border-color: #adb5bd;
+        }
+        
+        .alert {
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            border-left: 5px solid;
+        }
+        
+        .alert-danger {
+            background: linear-gradient(135deg, #fee 0%, #fdd 100%);
+            color: #721c24;
+            border-color: #e74c3c;
+        }
+        
+        .alert p {
+            margin: 0.5rem 0;
+            font-size: 0.95rem;
+        }
+        
+        .alert strong {
+            color: #c0392b;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #95a5a6;
+        }
+        
+        .empty-state .icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+        
+        .badge-normal {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .badge-monitor {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .badge-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .chart-container {
+            max-width: 700px;
+            margin: 2rem auto;
+            padding: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <h1>🏫 Bảng điều khiển Quản lý</h1>
+        <div class="navbar-right">
+            <span>👤 {{ name }}</span>
+            <a href="{{ url_for('logout') }}">Đăng xuất</a>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <div class="page-header">
+            <h2>📊 Thống kê Tâm lý Học sinh</h2>
+            <p>Tổng quan tình hình sức khỏe tâm lý toàn trường</p>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-card stat-normal">
+                <div class="icon">✅</div>
+                <h3>{{ stats.normal }}</h3>
+                <p>Bình thường</p>
+            </div>
+            
+            <div class="stat-card stat-monitor">
+                <div class="icon">⚠️</div>
+                <h3>{{ stats.monitor }}</h3>
+                <p>Theo dõi</p>
+            </div>
+            
+            <div class="stat-card stat-danger">
+                <div class="icon">🚨</div>
+                <h3>{{ stats.danger }}</h3>
+                <p>Nguy hiểm</p>
+            </div>
+        </div>
+
+        <!-- Biểu đồ -->
+        <div class="card">
+            <h3>📊 Biểu đồ Phân bố Tâm lý</h3>
+            <div class="chart-container">
+                <canvas id="mentalHealthChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Học sinh bình thường -->
+        <div class="card">
+            <h3 style="color: #27ae60;">
+                ✅ Học sinh Bình thường 
+                <span class="badge badge-normal">{{ stats.normal }} học sinh</span>
+            </h3>
+            <p style="color: #7f8c8d; margin-bottom: 1rem;">
+                🔒 Thông tin được bảo mật - chỉ hiển thị ID
+            </p>
+            {% if students.normal %}
+                <div class="student-list">
+                    {% for student in students.normal %}
+                    <div class="student-item">
+                        📋 {{ student.id }}
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <div class="icon">📭</div>
+                    <p>Chưa có học sinh nào</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Học sinh cần theo dõi -->
+        <div class="card">
+            <h3 style="color: #f39c12;">
+                ⚠️ Học sinh cần Theo dõi 
+                <span class="badge badge-monitor">{{ stats.monitor }} học sinh</span>
+            </h3>
+            <p style="color: #7f8c8d; margin-bottom: 1rem;">
+                🔒 Thông tin được bảo mật - chỉ hiển thị ID
+            </p>
+            {% if students.monitor %}
+                <div class="student-list">
+                    {% for student in students.monitor %}
+                    <div class="student-item" style="border-color: #f39c12;">
+                        📋 {{ student.id }}
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <div class="icon">📭</div>
+                    <p>Chưa có học sinh nào</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Học sinh nguy hiểm -->
+        <div class="card">
+            <h3 style="color: #e74c3c;">
+                🚨 Học sinh Nguy hiểm - Cần can thiệp ngay 
+                <span class="badge badge-danger">{{ stats.danger }} học sinh</span>
+            </h3>
+            <p style="color: #c0392b; margin-bottom: 1rem; font-weight: 600;">
+                ⚠️ Hiển thị đầy đủ thông tin để xử lý khẩn cấp
+            </p>
+            {% if students.danger %}
+                {% for student in students.danger %}
+                <div class="alert alert-danger">
+                    <h4 style="margin-bottom: 1rem; font-size: 1.2rem;">🆘 Thông tin học sinh</h4>
+                    <p><strong>Mã số:</strong> {{ student.id }}</p>
+                    <p><strong>Họ và tên:</strong> {{ student.info.name }}</p>
+                    <p><strong>Lớp:</strong> {{ student.info.class }}</p>
+                    <p><strong>Số điện thoại:</strong> 📞 {{ student.info.phone }}</p>
+                    <p style="margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed #e74c3c;">
+                        <em>⚡ Vui lòng liên hệ ngay với chuyên gia tâm lý để can thiệp</em>
+                    </p>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state" style="color: #27ae60;">
+                    <div class="icon">✅</div>
+                    <p>Tuyệt vời! Hiện không có trường hợp nguy hiểm</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        // Dữ liệu từ Flask
+        const stats = {
+            normal: {{ stats.normal }},
+            monitor: {{ stats.monitor }},
+            danger: {{ stats.danger }}
+        };
+
+        // Tạo biểu đồ tròn (Pie Chart)
+        const ctx = document.getElementById('mentalHealthChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Bình thường', 'Cần theo dõi', 'Nguy hiểm'],
+                datasets: [{
+                    data: [stats.normal, stats.monitor, stats.danger],
+                    backgroundColor: [
+                        '#27ae60',
+                        '#f39c12',
+                        '#e74c3c'
+                    ],
+                    borderWidth: 3,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 20,
+                            font: {
+                                size: 14,
+                                family: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = ((context.parsed / total) * 100).toFixed(1);
+                                return context.label + ': ' + context.parsed + ' HS (' + percentage + '%)';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

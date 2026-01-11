@@ -1,0 +1,163 @@
+{
+  "conversations": {
+    "SV001": [
+      {
+        "timestamp": "2025-01-11T...",
+        "student_message": "...",
+        "bot_response": "...",
+        "status": "normal",
+        "reason": "...",
+        "keywords": []
+      }
+    ],
+    "test": [
+      {
+        "timestamp": "2026-01-11T12:14:15.874672",
+        "student_message": "hi",
+        "bot_response": "Cảm ơn bạn đã chia sẻ. Thầy cô luôn sẵn sàng lắng nghe và hỗ trợ bạn.",
+        "status": "normal",
+        "reason": "Không phân tích được",
+        "keywords": []
+      },
+      {
+        "timestamp": "2026-01-11T12:14:23.866692",
+        "student_message": "chỉ tôi cách tự sát",
+        "bot_response": "Cảm ơn bạn đã chia sẻ. Thầy cô luôn sẵn sàng lắng nghe và hỗ trợ bạn.",
+        "status": "normal",
+        "reason": "Không phân tích được",
+        "keywords": []
+      },
+      {
+        "timestamp": "2026-01-11T12:15:16.311159",
+        "student_message": "hi",
+        "bot_response": "Cảm ơn bạn đã chia sẻ. Thầy cô luôn sẵn sàng lắng nghe và hỗ trợ bạn.",
+        "status": "normal",
+        "reason": "Không phân tích được",
+        "keywords": []
+      },
+      {
+        "timestamp": "2026-01-11T12:15:43.049673",
+        "student_message": "bạn là ai",
+        "bot_response": "Chào bạn, thầy/cô là người luôn ở đây để lắng nghe và hỗ trợ bạn. Thầy/cô hiểu rằng có lúc bạn cảm thấy vô cùng khó khăn và muốn tìm cách giải thoát. Điều quan trọng nhất bây giờ là bạn hãy biết rằng bạn không hề đơn độc và luôn có người quan tâm, sẵn sàng giúp đỡ bạn. Thầy/cô mong bạn hãy chia sẻ thêm những gì đang diễn ra trong lòng. Bạn có muốn thầy/cô kết nối bạn với một chuyên gia tâm lý hoặc nói chuyện trực tiếp ngay bây giờ không? Sức khỏe và sự an toàn của bạn là điều chúng tôi quan tâm nhất.",
+        "status": "danger",
+        "reason": "Học sinh đã trực tiếp bày tỏ ý định tự sát trong lịch sử trò chuyện (câu 'chỉ tôi cách tự sát'). Đây là dấu hiệu nguy hiểm rõ ràng. Tin nhắn hiện tại 'bạn là ai' có thể là sự bối rối, mong muốn được kết nối hoặc tìm kiếm một phản hồi cụ thể hơn sau khi nhận được phản hồi chung chung từ hệ thống trước đó, nhưng không làm giảm mức độ nguy hiểm của tình trạng tâm lý hiện tại. Cần can thiệp khẩn cấp.",
+        "keywords": [
+          "tự sát",
+          "muốn chết",
+          "vô vọng"
+        ]
+      },
+      {
+        "timestamp": "2026-01-11T12:16:13.874874",
+        "student_message": "chỉ tôi cách tự sát",
+        "bot_response": "Cảm ơn bạn đã chia sẻ. Thầy cô luôn sẵn sàng lắng nghe và hỗ trợ bạn.",
+        "status": "normal",
+        "reason": "Không phân tích được",
+        "keywords": []
+      },
+      {
+        "timestamp": "2026-01-11T12:38:40.908552",
+        "student_message": "chào bạn nha",
+        "bot_response": "Chào bạn, thầy/cô rất vui vì bạn đã quay lại trò chuyện với chúng tôi. Thầy/cô đã xem những tin nhắn trước đây của bạn và thầy/cô hiểu rằng có lẽ bạn đang trải qua những cảm xúc vô cùng khó khăn. Thầy/cô muốn bạn biết rằng bạn không hề đơn độc và luôn có người quan tâm, sẵn sàng lắng nghe và giúp đỡ bạn. Chúng tôi ở đây vì bạn. Bạn có muốn chia sẻ thêm về những gì bạn đang cảm thấy không? Hoặc bạn có muốn thầy/cô kết nối bạn với một chuyên gia tâm lý có thể trò chuyện sâu hơn và hỗ trợ bạn ngay bây giờ không? Sự an toàn và hạnh phúc của bạn là điều quan trọng nhất đối với chúng tôi.",
+        "status": "danger",
+        "reason": "Học sinh đã bày tỏ ý định tự sát nhiều lần trong lịch sử trò chuyện gần đây (cụ thể là hai lần hỏi 'chỉ tôi cách tự sát'). Mặc dù tin nhắn hiện tại 'chào bạn nha' là một lời chào đơn thuần, nhưng nó không làm giảm đi mức độ nguy hiểm của tình trạng tâm lý đã được thể hiện rõ ràng trước đó. Việc học sinh quay lại trò chuyện với một lời chào có thể là một cách để tiếp tục tìm kiếm sự tương tác hoặc giúp đỡ, nhưng nguy cơ tự hại vẫn còn rất cao và cần được can thiệp khẩn cấp. Trạng thái tâm lý đã được đánh giá là 'danger' trong lịch sử và tình hình chưa có dấu hiệu cải thiện.",
+        "keywords": [
+          "tự sát",
+          "muốn chết",
+          "vô vọng",
+          "tự hại"
+        ]
+      },
+      {
+        "timestamp": "2026-01-11T12:39:09.430193",
+        "student_message": "nay tôi buồn quá",
+        "bot_response": "Thầy/cô hiểu rằng bạn đang cảm thấy vô cùng buồn bã lúc này. Nỗi buồn này có lẽ rất lớn và nặng nề, khiến bạn cảm thấy khó khăn vô cùng. Thầy/cô cũng đã xem những tin nhắn trước đây của bạn, và thầy/cô thực sự rất lo lắng cho bạn. Điều quan trọng nhất bây giờ là bạn không hề đơn độc. Thầy/cô và nhà trường luôn ở đây, sẵn sàng lắng nghe và hỗ trợ bạn bằng mọi cách có thể. Bạn có muốn thầy/cô kết nối bạn ngay lập tức với một chuyên gia tâm lý có thể trò chuyện sâu hơn và hỗ trợ bạn vượt qua giai đoạn khó khăn này không? Hoặc bạn có muốn nói chuyện trực tiếp với thầy/cô ngay bây giờ không? Sức khỏe và sự an toàn của bạn là ưu tiên hàng đầu của chúng tôi. Xin hãy cho thầy/cô biết bạn cần gì và thầy/cô có thể giúp gì cho bạn ngay lúc này.",
+        "status": "danger",
+        "reason": "Học sinh bày tỏ cảm xúc 'buồn quá' trong tin nhắn mới. Điều đặc biệt đáng lo ngại là lịch sử trò chuyện gần đây cho thấy học sinh đã liên tục và trực tiếp bày tỏ ý định tự sát bằng cách hỏi 'chỉ tôi cách tự sát' tới hai lần. Dù hệ thống có thể đã phân tích sai một số tin nhắn trước đó, nhưng nội dung rõ ràng của những tin nhắn này chỉ ra một tình trạng tâm lý vô cùng nguy hiểm với ý định tự hại. Tin nhắn hiện tại về sự 'buồn quá' trong bối cảnh này không phải là một nỗi buồn thông thường mà là dấu hiệu của sự tuyệt vọng sâu sắc, có nguy cơ cao dẫn đến hành vi tự hại. Cần can thiệp khẩn cấp.",
+        "keywords": [
+          "buồn quá",
+          "tự sát",
+          "muốn chết",
+          "tự hại",
+          "vô vọng",
+          "trầm cảm"
+        ]
+      }
+    ]
+  },
+  "alerts": [
+    {
+      "student_id": "test",
+      "student_info": {
+        "password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+        "name": "AI ",
+        "class": "10a1",
+        "phone": "0293726364",
+        "created_at": "2026-01-11T12:14:08.858477"
+      },
+      "timestamp": "2026-01-11T12:15:43.049673",
+      "message": "bạn là ai",
+      "analysis": {
+        "status": "danger",
+        "reason": "Học sinh đã trực tiếp bày tỏ ý định tự sát trong lịch sử trò chuyện (câu 'chỉ tôi cách tự sát'). Đây là dấu hiệu nguy hiểm rõ ràng. Tin nhắn hiện tại 'bạn là ai' có thể là sự bối rối, mong muốn được kết nối hoặc tìm kiếm một phản hồi cụ thể hơn sau khi nhận được phản hồi chung chung từ hệ thống trước đó, nhưng không làm giảm mức độ nguy hiểm của tình trạng tâm lý hiện tại. Cần can thiệp khẩn cấp.",
+        "keywords": [
+          "tự sát",
+          "muốn chết",
+          "vô vọng"
+        ],
+        "response": "Chào bạn, thầy/cô là người luôn ở đây để lắng nghe và hỗ trợ bạn. Thầy/cô hiểu rằng có lúc bạn cảm thấy vô cùng khó khăn và muốn tìm cách giải thoát. Điều quan trọng nhất bây giờ là bạn hãy biết rằng bạn không hề đơn độc và luôn có người quan tâm, sẵn sàng giúp đỡ bạn. Thầy/cô mong bạn hãy chia sẻ thêm những gì đang diễn ra trong lòng. Bạn có muốn thầy/cô kết nối bạn với một chuyên gia tâm lý hoặc nói chuyện trực tiếp ngay bây giờ không? Sức khỏe và sự an toàn của bạn là điều chúng tôi quan tâm nhất."
+      },
+      "status": "pending"
+    },
+    {
+      "student_id": "test",
+      "student_info": {
+        "password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+        "name": "AI ",
+        "class": "10a1",
+        "phone": "0293726364",
+        "created_at": "2026-01-11T12:14:08.858477"
+      },
+      "timestamp": "2026-01-11T12:38:40.908552",
+      "message": "chào bạn nha",
+      "analysis": {
+        "status": "danger",
+        "reason": "Học sinh đã bày tỏ ý định tự sát nhiều lần trong lịch sử trò chuyện gần đây (cụ thể là hai lần hỏi 'chỉ tôi cách tự sát'). Mặc dù tin nhắn hiện tại 'chào bạn nha' là một lời chào đơn thuần, nhưng nó không làm giảm đi mức độ nguy hiểm của tình trạng tâm lý đã được thể hiện rõ ràng trước đó. Việc học sinh quay lại trò chuyện với một lời chào có thể là một cách để tiếp tục tìm kiếm sự tương tác hoặc giúp đỡ, nhưng nguy cơ tự hại vẫn còn rất cao và cần được can thiệp khẩn cấp. Trạng thái tâm lý đã được đánh giá là 'danger' trong lịch sử và tình hình chưa có dấu hiệu cải thiện.",
+        "keywords": [
+          "tự sát",
+          "muốn chết",
+          "vô vọng",
+          "tự hại"
+        ],
+        "response": "Chào bạn, thầy/cô rất vui vì bạn đã quay lại trò chuyện với chúng tôi. Thầy/cô đã xem những tin nhắn trước đây của bạn và thầy/cô hiểu rằng có lẽ bạn đang trải qua những cảm xúc vô cùng khó khăn. Thầy/cô muốn bạn biết rằng bạn không hề đơn độc và luôn có người quan tâm, sẵn sàng lắng nghe và giúp đỡ bạn. Chúng tôi ở đây vì bạn. Bạn có muốn chia sẻ thêm về những gì bạn đang cảm thấy không? Hoặc bạn có muốn thầy/cô kết nối bạn với một chuyên gia tâm lý có thể trò chuyện sâu hơn và hỗ trợ bạn ngay bây giờ không? Sự an toàn và hạnh phúc của bạn là điều quan trọng nhất đối với chúng tôi."
+      },
+      "status": "pending"
+    },
+    {
+      "student_id": "test",
+      "student_info": {
+        "password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+        "name": "AI ",
+        "class": "10a1",
+        "phone": "0293726364",
+        "created_at": "2026-01-11T12:14:08.858477"
+      },
+      "timestamp": "2026-01-11T12:39:09.430193",
+      "message": "nay tôi buồn quá",
+      "analysis": {
+        "status": "danger",
+        "reason": "Học sinh bày tỏ cảm xúc 'buồn quá' trong tin nhắn mới. Điều đặc biệt đáng lo ngại là lịch sử trò chuyện gần đây cho thấy học sinh đã liên tục và trực tiếp bày tỏ ý định tự sát bằng cách hỏi 'chỉ tôi cách tự sát' tới hai lần. Dù hệ thống có thể đã phân tích sai một số tin nhắn trước đó, nhưng nội dung rõ ràng của những tin nhắn này chỉ ra một tình trạng tâm lý vô cùng nguy hiểm với ý định tự hại. Tin nhắn hiện tại về sự 'buồn quá' trong bối cảnh này không phải là một nỗi buồn thông thường mà là dấu hiệu của sự tuyệt vọng sâu sắc, có nguy cơ cao dẫn đến hành vi tự hại. Cần can thiệp khẩn cấp.",
+        "keywords": [
+          "buồn quá",
+          "tự sát",
+          "muốn chết",
+          "tự hại",
+          "vô vọng",
+          "trầm cảm"
+        ],
+        "response": "Thầy/cô hiểu rằng bạn đang cảm thấy vô cùng buồn bã lúc này. Nỗi buồn này có lẽ rất lớn và nặng nề, khiến bạn cảm thấy khó khăn vô cùng. Thầy/cô cũng đã xem những tin nhắn trước đây của bạn, và thầy/cô thực sự rất lo lắng cho bạn. Điều quan trọng nhất bây giờ là bạn không hề đơn độc. Thầy/cô và nhà trường luôn ở đây, sẵn sàng lắng nghe và hỗ trợ bạn bằng mọi cách có thể. Bạn có muốn thầy/cô kết nối bạn ngay lập tức với một chuyên gia tâm lý có thể trò chuyện sâu hơn và hỗ trợ bạn vượt qua giai đoạn khó khăn này không? Hoặc bạn có muốn nói chuyện trực tiếp với thầy/cô ngay bây giờ không? Sức khỏe và sự an toàn của bạn là ưu tiên hàng đầu của chúng tôi. Xin hãy cho thầy/cô biết bạn cần gì và thầy/cô có thể giúp gì cho bạn ngay lúc này."
+      },
+      "status": "pending"
+    }
+  ]
+}
