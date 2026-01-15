@@ -50,14 +50,14 @@
       "level": 1,
       "health": 100,
       "mood": "happy",
-      "total_care_count": 3,
+      "total_care_count": 5,
       "chat_count": 0,
       "days_at_100_health": 0,
       "last_100_health_date": "2026-01-15",
       "consecutive_days_100": 1,
       "level_up_history": [],
       "created_at": "2026-01-15T14:16:49.346735",
-      "last_updated": "2026-01-15T15:11:53.913196"
+      "last_updated": "2026-01-15T16:38:43.856922"
     },
     "test": {
       "pet_type": "pikachu",
@@ -109,6 +109,18 @@
         "task_name": "Hít thở sâu 10 lần",
         "health_bonus": 5,
         "completed_at": "2026-01-15T14:46:53.515021"
+      },
+      {
+        "task_id": "drink_water",
+        "task_name": "Uống 1 cốc nước",
+        "health_bonus": 5,
+        "completed_at": "2026-01-15T16:35:36.582515"
+      },
+      {
+        "task_id": "drink_water",
+        "task_name": "Uống 1 cốc nước",
+        "health_bonus": 5,
+        "completed_at": "2026-01-15T16:38:43.821690"
       }
     ],
     "test": [
