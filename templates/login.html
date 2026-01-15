@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng nhập - Hệ thống Giám sát Tâm lý</title>
+    <title>Đăng nhập - MINDBUDDY</title>
     <style>
         * {
             margin: 0;
@@ -13,18 +13,19 @@
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #e0f7fa 0%, #c8e6c9 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 20px;
         }
         
         .login-container {
             background: white;
             padding: 3rem;
             border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 20px 60px rgba(79, 195, 247, 0.3);
             width: 100%;
             max-width: 420px;
         }
@@ -35,23 +36,26 @@
         }
         
         .logo h1 {
-            color: #667eea;
+            background: linear-gradient(135deg, #4fc3f7 0%, #66bb6a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             font-size: 1.8rem;
             margin-bottom: 0.5rem;
         }
         
         .logo p {
-            color: #666;
+            color: #546e7a;
             font-size: 0.95rem;
         }
         
         .alert {
             padding: 1rem;
-            border-radius: 8px;
+            border-radius: 10px;
             margin-bottom: 1.5rem;
-            background: #fee;
-            color: #c33;
-            border: 1px solid #fcc;
+            background: #ffebee;
+            color: #c62828;
+            border-left: 4px solid #ef5350;
             font-size: 0.9rem;
         }
         
@@ -62,7 +66,7 @@
         .form-group label {
             display: block;
             margin-bottom: 0.5rem;
-            color: #333;
+            color: #37474f;
             font-weight: 600;
             font-size: 0.95rem;
         }
@@ -70,7 +74,7 @@
         .form-group input {
             width: 100%;
             padding: 0.9rem;
-            border: 2px solid #e0e0e0;
+            border: 2px solid #b3e5fc;
             border-radius: 10px;
             font-size: 1rem;
             transition: all 0.3s;
@@ -78,26 +82,27 @@
         
         .form-group input:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: #4fc3f7;
+            box-shadow: 0 0 0 3px rgba(79, 195, 247, 0.1);
         }
         
         .btn {
             width: 100%;
             padding: 1rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #4fc3f7 0%, #66bb6a 100%);
             color: white;
             border: none;
             border-radius: 10px;
             font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(79, 195, 247, 0.3);
         }
         
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 6px 20px rgba(79, 195, 247, 0.4);
         }
         
         .btn:active {
@@ -107,7 +112,7 @@
         .divider {
             text-align: center;
             margin: 1.5rem 0;
-            color: #999;
+            color: #90a4ae;
             position: relative;
         }
         
@@ -118,7 +123,7 @@
             top: 50%;
             width: 40%;
             height: 1px;
-            background: #e0e0e0;
+            background: #b3e5fc;
         }
         
         .divider::before {
@@ -132,54 +137,66 @@
         .register-link {
             text-align: center;
             margin-top: 1.5rem;
-            color: #666;
+            color: #546e7a;
         }
         
         .register-link a {
-            color: #667eea;
+            color: #4fc3f7;
             text-decoration: none;
             font-weight: 600;
         }
         
         .register-link a:hover {
+            color: #66bb6a;
             text-decoration: underline;
         }
         
         .info-box {
-            background: #f8f9ff;
+            background: linear-gradient(135deg, #e1f5fe 0%, #e8f5e9 100%);
             padding: 1rem;
             border-radius: 10px;
             margin-top: 1.5rem;
             font-size: 0.85rem;
-            color: #555;
+            color: #37474f;
+            border-left: 4px solid #4fc3f7;
         }
         
         .info-box strong {
-            color: #667eea;
+            color: #0288d1;
+        }
+        
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 2rem;
+            }
+            
+            .logo h1 {
+                font-size: 1.5rem;
+            }
         }
     </style>
 </head>
 <body>
     <div class="login-container">
         <div class="logo">
-            <h1>🧠 Tâm lý Học đường</h1>
+            <h1> Tâm lý Học đường</h1>
             <p>Hệ thống Giám sát và Hỗ trợ Tâm lý</p>
         </div>
         
         {% if error %}
         <div class="alert">
-            ⚠️ {{ error }}
+             {{ error }}
         </div>
         {% endif %}
         
         <form method="POST">
             <div class="form-group">
-                <label for="user_id">📋 Tên đăng nhập</label>
+                <label for="user_id"> Tên đăng nhập</label>
                 <input type="text" id="user_id" name="user_id" placeholder="Nhập tên đăng nhập" required autofocus>
             </div>
             
             <div class="form-group">
-                <label for="password">🔒 Mật khẩu</label>
+                <label for="password"> Mật khẩu</label>
                 <input type="password" id="password" name="password" placeholder="Nhập mật khẩu" required>
             </div>
             
@@ -193,7 +210,7 @@
         </div>
         
         <div class="info-box">
-            <strong>📌 Ví dụ đăng nhập:</strong>
+            <strong> Ví dụ đăng nhập:</strong>
             <br>• <strong>Giáo viên:</strong> gv_toan / toan123
             <br>• <strong>Hiệu trưởng:</strong> ht_truong / ht123
             <br>• <strong>Học sinh:</strong> SV001 / (mật khẩu đã đăng ký)

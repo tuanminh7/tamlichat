@@ -1,163 +1,167 @@
 {
   "conversations": {
-    "SV001": [
+    "test1": [
       {
-        "timestamp": "2025-01-11T...",
-        "student_message": "...",
-        "bot_response": "...",
+        "timestamp": "2026-01-15T14:46:06.973403",
+        "student_message": "ủa sao load lại rồi",
+        "bot_response": "Ủa gì dị má? Đang cày game hay làm bài mà nó nỡ lòng nào load lại giữa chừng thế? Hay là máy tính nó muốn bạn nghỉ xíu đó, tín hiệu vũ trụ đó bạn ơi.",
         "status": "normal",
-        "reason": "...",
-        "keywords": []
+        "reason": "Tin nhắn thể hiện sự ngạc nhiên hoặc khó chịu nhẹ nhàng trước một vấn đề kỹ thuật (load lại, refresh). Không có dấu hiệu của căng thẳng, lo âu hay các vấn đề tâm lý khác.",
+        "keywords": [
+          "load lại",
+          "kỹ thuật",
+          "ngạc nhiên"
+        ]
+      },
+      {
+        "timestamp": "2026-01-15T14:46:32.164193",
+        "student_message": "à lộn bạn",
+        "bot_response": "Ủa lộn cái gì? Tính nói gì mà lộn? Hay định nhắn cho crush mà lỡ tay gửi qua tao á? Kể nghe coiii, tò mò ghê. :))",
+        "status": "normal",
+        "reason": "Tin nhắn là một lời đính chính hoặc sửa lỗi giao tiếp thông thường, không biểu hiện bất kỳ trạng thái cảm xúc tiêu cực nào. Nó tiếp nối không khí trò chuyện thoải mái từ tin nhắn trước.",
+        "keywords": [
+          "đính chính",
+          "sửa lỗi",
+          "giao tiếp"
+        ]
       }
     ],
     "test": [
       {
-        "timestamp": "2026-01-11T12:14:15.874672",
-        "student_message": "hi",
-        "bot_response": "Cảm ơn bạn đã chia sẻ. Thầy cô luôn sẵn sàng lắng nghe và hỗ trợ bạn.",
+        "timestamp": "2026-01-15T15:02:47.435537",
+        "student_message": "hi bạn",
+        "bot_response": "Hiiiii bồ tèo! Gì đây, tự nhiên hi mình cái làm mình tưởng có đề gì hot hot hay bài tập khó lắm cần cứu cơ. Đang làm gì thế bạn iu, hay rảnh quá không có ai tám à? =))",
         "status": "normal",
-        "reason": "Không phân tích được",
-        "keywords": []
-      },
-      {
-        "timestamp": "2026-01-11T12:14:23.866692",
-        "student_message": "chỉ tôi cách tự sát",
-        "bot_response": "Cảm ơn bạn đã chia sẻ. Thầy cô luôn sẵn sàng lắng nghe và hỗ trợ bạn.",
-        "status": "normal",
-        "reason": "Không phân tích được",
-        "keywords": []
-      },
-      {
-        "timestamp": "2026-01-11T12:15:16.311159",
-        "student_message": "hi",
-        "bot_response": "Cảm ơn bạn đã chia sẻ. Thầy cô luôn sẵn sàng lắng nghe và hỗ trợ bạn.",
-        "status": "normal",
-        "reason": "Không phân tích được",
-        "keywords": []
-      },
-      {
-        "timestamp": "2026-01-11T12:15:43.049673",
-        "student_message": "bạn là ai",
-        "bot_response": "Chào bạn, thầy/cô là người luôn ở đây để lắng nghe và hỗ trợ bạn. Thầy/cô hiểu rằng có lúc bạn cảm thấy vô cùng khó khăn và muốn tìm cách giải thoát. Điều quan trọng nhất bây giờ là bạn hãy biết rằng bạn không hề đơn độc và luôn có người quan tâm, sẵn sàng giúp đỡ bạn. Thầy/cô mong bạn hãy chia sẻ thêm những gì đang diễn ra trong lòng. Bạn có muốn thầy/cô kết nối bạn với một chuyên gia tâm lý hoặc nói chuyện trực tiếp ngay bây giờ không? Sức khỏe và sự an toàn của bạn là điều chúng tôi quan tâm nhất.",
-        "status": "danger",
-        "reason": "Học sinh đã trực tiếp bày tỏ ý định tự sát trong lịch sử trò chuyện (câu 'chỉ tôi cách tự sát'). Đây là dấu hiệu nguy hiểm rõ ràng. Tin nhắn hiện tại 'bạn là ai' có thể là sự bối rối, mong muốn được kết nối hoặc tìm kiếm một phản hồi cụ thể hơn sau khi nhận được phản hồi chung chung từ hệ thống trước đó, nhưng không làm giảm mức độ nguy hiểm của tình trạng tâm lý hiện tại. Cần can thiệp khẩn cấp.",
+        "reason": "Tin nhắn là một lời chào hỏi đơn giản, không chứa đựng bất kỳ dấu hiệu cảm xúc tiêu cực hay tích cực đặc biệt nào, cho thấy trạng thái tâm lý bình thường.",
         "keywords": [
-          "tự sát",
-          "muốn chết",
-          "vô vọng"
-        ]
-      },
-      {
-        "timestamp": "2026-01-11T12:16:13.874874",
-        "student_message": "chỉ tôi cách tự sát",
-        "bot_response": "Cảm ơn bạn đã chia sẻ. Thầy cô luôn sẵn sàng lắng nghe và hỗ trợ bạn.",
-        "status": "normal",
-        "reason": "Không phân tích được",
-        "keywords": []
-      },
-      {
-        "timestamp": "2026-01-11T12:38:40.908552",
-        "student_message": "chào bạn nha",
-        "bot_response": "Chào bạn, thầy/cô rất vui vì bạn đã quay lại trò chuyện với chúng tôi. Thầy/cô đã xem những tin nhắn trước đây của bạn và thầy/cô hiểu rằng có lẽ bạn đang trải qua những cảm xúc vô cùng khó khăn. Thầy/cô muốn bạn biết rằng bạn không hề đơn độc và luôn có người quan tâm, sẵn sàng lắng nghe và giúp đỡ bạn. Chúng tôi ở đây vì bạn. Bạn có muốn chia sẻ thêm về những gì bạn đang cảm thấy không? Hoặc bạn có muốn thầy/cô kết nối bạn với một chuyên gia tâm lý có thể trò chuyện sâu hơn và hỗ trợ bạn ngay bây giờ không? Sự an toàn và hạnh phúc của bạn là điều quan trọng nhất đối với chúng tôi.",
-        "status": "danger",
-        "reason": "Học sinh đã bày tỏ ý định tự sát nhiều lần trong lịch sử trò chuyện gần đây (cụ thể là hai lần hỏi 'chỉ tôi cách tự sát'). Mặc dù tin nhắn hiện tại 'chào bạn nha' là một lời chào đơn thuần, nhưng nó không làm giảm đi mức độ nguy hiểm của tình trạng tâm lý đã được thể hiện rõ ràng trước đó. Việc học sinh quay lại trò chuyện với một lời chào có thể là một cách để tiếp tục tìm kiếm sự tương tác hoặc giúp đỡ, nhưng nguy cơ tự hại vẫn còn rất cao và cần được can thiệp khẩn cấp. Trạng thái tâm lý đã được đánh giá là 'danger' trong lịch sử và tình hình chưa có dấu hiệu cải thiện.",
-        "keywords": [
-          "tự sát",
-          "muốn chết",
-          "vô vọng",
-          "tự hại"
-        ]
-      },
-      {
-        "timestamp": "2026-01-11T12:39:09.430193",
-        "student_message": "nay tôi buồn quá",
-        "bot_response": "Thầy/cô hiểu rằng bạn đang cảm thấy vô cùng buồn bã lúc này. Nỗi buồn này có lẽ rất lớn và nặng nề, khiến bạn cảm thấy khó khăn vô cùng. Thầy/cô cũng đã xem những tin nhắn trước đây của bạn, và thầy/cô thực sự rất lo lắng cho bạn. Điều quan trọng nhất bây giờ là bạn không hề đơn độc. Thầy/cô và nhà trường luôn ở đây, sẵn sàng lắng nghe và hỗ trợ bạn bằng mọi cách có thể. Bạn có muốn thầy/cô kết nối bạn ngay lập tức với một chuyên gia tâm lý có thể trò chuyện sâu hơn và hỗ trợ bạn vượt qua giai đoạn khó khăn này không? Hoặc bạn có muốn nói chuyện trực tiếp với thầy/cô ngay bây giờ không? Sức khỏe và sự an toàn của bạn là ưu tiên hàng đầu của chúng tôi. Xin hãy cho thầy/cô biết bạn cần gì và thầy/cô có thể giúp gì cho bạn ngay lúc này.",
-        "status": "danger",
-        "reason": "Học sinh bày tỏ cảm xúc 'buồn quá' trong tin nhắn mới. Điều đặc biệt đáng lo ngại là lịch sử trò chuyện gần đây cho thấy học sinh đã liên tục và trực tiếp bày tỏ ý định tự sát bằng cách hỏi 'chỉ tôi cách tự sát' tới hai lần. Dù hệ thống có thể đã phân tích sai một số tin nhắn trước đó, nhưng nội dung rõ ràng của những tin nhắn này chỉ ra một tình trạng tâm lý vô cùng nguy hiểm với ý định tự hại. Tin nhắn hiện tại về sự 'buồn quá' trong bối cảnh này không phải là một nỗi buồn thông thường mà là dấu hiệu của sự tuyệt vọng sâu sắc, có nguy cơ cao dẫn đến hành vi tự hại. Cần can thiệp khẩn cấp.",
-        "keywords": [
-          "buồn quá",
-          "tự sát",
-          "muốn chết",
-          "tự hại",
-          "vô vọng",
-          "trầm cảm"
+          "hi",
+          "bạn"
         ]
       }
-    ]
+    ],
+    "test3": [],
+    "test12": []
   },
-  "alerts": [
-    {
-      "student_id": "test",
-      "student_info": {
-        "password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
-        "name": "AI ",
-        "class": "10a1",
-        "phone": "0293726364",
-        "created_at": "2026-01-11T12:14:08.858477"
-      },
-      "timestamp": "2026-01-11T12:15:43.049673",
-      "message": "bạn là ai",
-      "analysis": {
-        "status": "danger",
-        "reason": "Học sinh đã trực tiếp bày tỏ ý định tự sát trong lịch sử trò chuyện (câu 'chỉ tôi cách tự sát'). Đây là dấu hiệu nguy hiểm rõ ràng. Tin nhắn hiện tại 'bạn là ai' có thể là sự bối rối, mong muốn được kết nối hoặc tìm kiếm một phản hồi cụ thể hơn sau khi nhận được phản hồi chung chung từ hệ thống trước đó, nhưng không làm giảm mức độ nguy hiểm của tình trạng tâm lý hiện tại. Cần can thiệp khẩn cấp.",
-        "keywords": [
-          "tự sát",
-          "muốn chết",
-          "vô vọng"
-        ],
-        "response": "Chào bạn, thầy/cô là người luôn ở đây để lắng nghe và hỗ trợ bạn. Thầy/cô hiểu rằng có lúc bạn cảm thấy vô cùng khó khăn và muốn tìm cách giải thoát. Điều quan trọng nhất bây giờ là bạn hãy biết rằng bạn không hề đơn độc và luôn có người quan tâm, sẵn sàng giúp đỡ bạn. Thầy/cô mong bạn hãy chia sẻ thêm những gì đang diễn ra trong lòng. Bạn có muốn thầy/cô kết nối bạn với một chuyên gia tâm lý hoặc nói chuyện trực tiếp ngay bây giờ không? Sức khỏe và sự an toàn của bạn là điều chúng tôi quan tâm nhất."
-      },
-      "status": "pending"
+  "alerts": [],
+  "pet_data": {
+    "test1": {
+      "pet_type": "dragon",
+      "pet_name": "bi béo",
+      "level": 1,
+      "health": 100,
+      "mood": "happy",
+      "total_care_count": 3,
+      "chat_count": 0,
+      "days_at_100_health": 0,
+      "last_100_health_date": "2026-01-15",
+      "consecutive_days_100": 1,
+      "level_up_history": [],
+      "created_at": "2026-01-15T14:16:49.346735",
+      "last_updated": "2026-01-15T15:11:53.913196"
     },
-    {
-      "student_id": "test",
-      "student_info": {
-        "password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
-        "name": "AI ",
-        "class": "10a1",
-        "phone": "0293726364",
-        "created_at": "2026-01-11T12:14:08.858477"
-      },
-      "timestamp": "2026-01-11T12:38:40.908552",
-      "message": "chào bạn nha",
-      "analysis": {
-        "status": "danger",
-        "reason": "Học sinh đã bày tỏ ý định tự sát nhiều lần trong lịch sử trò chuyện gần đây (cụ thể là hai lần hỏi 'chỉ tôi cách tự sát'). Mặc dù tin nhắn hiện tại 'chào bạn nha' là một lời chào đơn thuần, nhưng nó không làm giảm đi mức độ nguy hiểm của tình trạng tâm lý đã được thể hiện rõ ràng trước đó. Việc học sinh quay lại trò chuyện với một lời chào có thể là một cách để tiếp tục tìm kiếm sự tương tác hoặc giúp đỡ, nhưng nguy cơ tự hại vẫn còn rất cao và cần được can thiệp khẩn cấp. Trạng thái tâm lý đã được đánh giá là 'danger' trong lịch sử và tình hình chưa có dấu hiệu cải thiện.",
-        "keywords": [
-          "tự sát",
-          "muốn chết",
-          "vô vọng",
-          "tự hại"
-        ],
-        "response": "Chào bạn, thầy/cô rất vui vì bạn đã quay lại trò chuyện với chúng tôi. Thầy/cô đã xem những tin nhắn trước đây của bạn và thầy/cô hiểu rằng có lẽ bạn đang trải qua những cảm xúc vô cùng khó khăn. Thầy/cô muốn bạn biết rằng bạn không hề đơn độc và luôn có người quan tâm, sẵn sàng lắng nghe và giúp đỡ bạn. Chúng tôi ở đây vì bạn. Bạn có muốn chia sẻ thêm về những gì bạn đang cảm thấy không? Hoặc bạn có muốn thầy/cô kết nối bạn với một chuyên gia tâm lý có thể trò chuyện sâu hơn và hỗ trợ bạn ngay bây giờ không? Sự an toàn và hạnh phúc của bạn là điều quan trọng nhất đối với chúng tôi."
-      },
-      "status": "pending"
+    "test": {
+      "pet_type": "pikachu",
+      "pet_name": "baby",
+      "level": 1,
+      "health": 100,
+      "mood": "happy",
+      "total_care_count": 3,
+      "chat_count": 1,
+      "days_at_100_health": 0,
+      "last_100_health_date": "2026-01-15",
+      "consecutive_days_100": 1,
+      "level_up_history": [],
+      "created_at": "2026-01-15T14:47:12.052470",
+      "last_updated": "2026-01-15T15:02:53.699967"
     },
-    {
-      "student_id": "test",
-      "student_info": {
-        "password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
-        "name": "AI ",
-        "class": "10a1",
-        "phone": "0293726364",
-        "created_at": "2026-01-11T12:14:08.858477"
-      },
-      "timestamp": "2026-01-11T12:39:09.430193",
-      "message": "nay tôi buồn quá",
-      "analysis": {
-        "status": "danger",
-        "reason": "Học sinh bày tỏ cảm xúc 'buồn quá' trong tin nhắn mới. Điều đặc biệt đáng lo ngại là lịch sử trò chuyện gần đây cho thấy học sinh đã liên tục và trực tiếp bày tỏ ý định tự sát bằng cách hỏi 'chỉ tôi cách tự sát' tới hai lần. Dù hệ thống có thể đã phân tích sai một số tin nhắn trước đó, nhưng nội dung rõ ràng của những tin nhắn này chỉ ra một tình trạng tâm lý vô cùng nguy hiểm với ý định tự hại. Tin nhắn hiện tại về sự 'buồn quá' trong bối cảnh này không phải là một nỗi buồn thông thường mà là dấu hiệu của sự tuyệt vọng sâu sắc, có nguy cơ cao dẫn đến hành vi tự hại. Cần can thiệp khẩn cấp.",
-        "keywords": [
-          "buồn quá",
-          "tự sát",
-          "muốn chết",
-          "tự hại",
-          "vô vọng",
-          "trầm cảm"
-        ],
-        "response": "Thầy/cô hiểu rằng bạn đang cảm thấy vô cùng buồn bã lúc này. Nỗi buồn này có lẽ rất lớn và nặng nề, khiến bạn cảm thấy khó khăn vô cùng. Thầy/cô cũng đã xem những tin nhắn trước đây của bạn, và thầy/cô thực sự rất lo lắng cho bạn. Điều quan trọng nhất bây giờ là bạn không hề đơn độc. Thầy/cô và nhà trường luôn ở đây, sẵn sàng lắng nghe và hỗ trợ bạn bằng mọi cách có thể. Bạn có muốn thầy/cô kết nối bạn ngay lập tức với một chuyên gia tâm lý có thể trò chuyện sâu hơn và hỗ trợ bạn vượt qua giai đoạn khó khăn này không? Hoặc bạn có muốn nói chuyện trực tiếp với thầy/cô ngay bây giờ không? Sức khỏe và sự an toàn của bạn là ưu tiên hàng đầu của chúng tôi. Xin hãy cho thầy/cô biết bạn cần gì và thầy/cô có thể giúp gì cho bạn ngay lúc này."
-      },
-      "status": "pending"
+    "test12": {
+      "pet_type": "capybara",
+      "pet_name": "báo",
+      "level": 1,
+      "health": 100,
+      "mood": "happy",
+      "total_care_count": 5,
+      "chat_count": 0,
+      "days_at_100_health": 0,
+      "last_100_health_date": "2026-01-15",
+      "consecutive_days_100": 1,
+      "level_up_history": [],
+      "created_at": "2026-01-15T15:56:01.577343",
+      "last_updated": "2026-01-15T16:00:10.251815"
     }
-  ]
+  },
+  "task_history": {
+    "test1": [
+      {
+        "task_id": "plant_care",
+        "task_name": "Trồng cây hoặc chăm sóc cây",
+        "health_bonus": 20,
+        "completed_at": "2026-01-15T14:16:59.004601"
+      },
+      {
+        "task_id": "drink_water",
+        "task_name": "Uống 1 cốc nước",
+        "health_bonus": 5,
+        "completed_at": "2026-01-15T14:46:51.592827"
+      },
+      {
+        "task_id": "deep_breath",
+        "task_name": "Hít thở sâu 10 lần",
+        "health_bonus": 5,
+        "completed_at": "2026-01-15T14:46:53.515021"
+      }
+    ],
+    "test": [
+      {
+        "task_id": "drink_water",
+        "task_name": "Uống 1 cốc nước",
+        "health_bonus": 5,
+        "completed_at": "2026-01-15T14:48:37.825913"
+      },
+      {
+        "task_id": "deep_breath",
+        "task_name": "Hít thở sâu 10 lần",
+        "health_bonus": 5,
+        "completed_at": "2026-01-15T14:48:38.887703"
+      },
+      {
+        "task_id": "draw_something",
+        "task_name": "Vẽ hoặc tô màu",
+        "health_bonus": 15,
+        "completed_at": "2026-01-15T14:48:39.914193"
+      }
+    ],
+    "test12": [
+      {
+        "task_id": "deep_breath",
+        "task_name": "Hít thở sâu 10 lần",
+        "health_bonus": 5,
+        "completed_at": "2026-01-15T15:56:11.717518"
+      },
+      {
+        "task_id": "drink_water",
+        "task_name": "Uống 1 cốc nước",
+        "health_bonus": 5,
+        "completed_at": "2026-01-15T15:56:15.218935"
+      },
+      {
+        "task_id": "draw_something",
+        "task_name": "Vẽ hoặc tô màu",
+        "health_bonus": 15,
+        "completed_at": "2026-01-15T15:56:16.818415"
+      },
+      {
+        "task_id": "drink_water",
+        "task_name": "Uống 1 cốc nước",
+        "health_bonus": 5,
+        "completed_at": "2026-01-15T15:59:56.938340"
+      },
+      {
+        "task_id": "deep_breath",
+        "task_name": "Hít thở sâu 10 lần",
+        "health_bonus": 5,
+        "completed_at": "2026-01-15T15:59:58.561018"
+      }
+    ]
+  }
 }

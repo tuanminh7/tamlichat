@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng ký - Hệ thống Giám sát Tâm lý</title>
+    <title>Đăng ký - MINDBUDDY</title>
     <style>
         * {
             margin: 0;
@@ -13,7 +13,7 @@
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #c8e6c9 0%, #a5d6a7 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -36,7 +36,10 @@
         }
         
         .logo h1 {
-            color: #667eea;
+            background: linear-gradient(135deg, #4fc3f7 0%, #66bb6a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             font-size: 1.8rem;
             margin-bottom: 0.5rem;
         }
@@ -71,7 +74,7 @@
         .form-group input {
             width: 100%;
             padding: 0.9rem;
-            border: 2px solid #e0e0e0;
+            border: 2px solid #b3e5fc;
             border-radius: 10px;
             font-size: 1rem;
             transition: all 0.3s;
@@ -79,8 +82,8 @@
         
         .form-group input:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: #4fc3f7;
+            box-shadow: 0 0 0 3px rgba(79, 195, 247, 0.1);
         }
         
         .form-group small {
@@ -93,20 +96,20 @@
         .btn {
             width: 100%;
             padding: 1rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #4fc3f7 0%, #66bb6a 100%);
             color: white;
             border: none;
             border-radius: 10px;
             font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: transform 0.2s, box-shadow 0.3s;
             margin-top: 0.5rem;
         }
         
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 5px 20px rgba(79, 195, 247, 0.4);
         }
         
         .btn:active {
@@ -120,27 +123,29 @@
         }
         
         .login-link a {
-            color: #667eea;
+            color: #4fc3f7;
             text-decoration: none;
             font-weight: 600;
+            transition: color 0.3s;
         }
         
         .login-link a:hover {
+            color: #66bb6a;
             text-decoration: underline;
         }
         
         .info-box {
-            background: #f0f7ff;
+            background: linear-gradient(135deg, #e1f5fe 0%, #e8f5e9 100%);
             padding: 1rem;
             border-radius: 10px;
             margin-bottom: 1.5rem;
             font-size: 0.85rem;
             color: #555;
-            border-left: 4px solid #667eea;
+            border-left: 4px solid #66bb6a;
         }
         
         .info-box strong {
-            color: #667eea;
+            color: #66bb6a;
             display: block;
             margin-bottom: 0.3rem;
         }
@@ -149,46 +154,44 @@
 <body>
     <div class="register-container">
         <div class="logo">
-            <h1>📝 Đăng ký tài khoản</h1>
+            <h1>Đăng ký tài khoản</h1>
             <p>Dành cho học sinh</p>
         </div>
         
         <div class="info-box">
-            <strong>🛡️ Cam kết bảo mật</strong>
+            <strong>Cam kết bảo mật</strong>
             Thông tin của bạn sẽ được bảo mật tuyệt đối. Chỉ có chuyên gia tâm lý và ban giám hiệu mới có quyền truy cập khi cần thiết.
         </div>
         
-        {% if error %}
-        <div class="alert">
-            ⚠️ {{ error }}
+        <div class="alert" style="display: none;" id="errorAlert">
+            <span id="errorMessage"></span>
         </div>
-        {% endif %}
         
-        <form method="POST">
+        <form method="POST" id="registerForm">
             <div class="form-group">
-                <label for="user_id">🎓 Mã số sinh viên (MSSV)</label>
+                <label for="user_id">Mã số sinh viên (MSSV)</label>
                 <input type="text" id="user_id" name="user_id" placeholder="Ví dụ: SV001" required autofocus>
                 <small>Mã này sẽ dùng để đăng nhập</small>
             </div>
             
             <div class="form-group">
-                <label for="password">🔒 Mật khẩu</label>
+                <label for="password">Mật khẩu</label>
                 <input type="password" id="password" name="password" placeholder="Tạo mật khẩu mạnh" required minlength="6">
                 <small>Tối thiểu 6 ký tự</small>
             </div>
             
             <div class="form-group">
-                <label for="name">👤 Họ và tên</label>
+                <label for="name">Họ và tên</label>
                 <input type="text" id="name" name="name" placeholder="Nguyễn Văn A" required>
             </div>
             
             <div class="form-group">
-                <label for="class">🏫 Lớp</label>
+                <label for="class">Lớp</label>
                 <input type="text" id="class" name="class" placeholder="Ví dụ: 10A1" required>
             </div>
             
             <div class="form-group">
-                <label for="phone">📱 Số điện thoại</label>
+                <label for="phone">Số điện thoại</label>
                 <input type="tel" id="phone" name="phone" placeholder="0123456789" required pattern="[0-9]{10}">
                 <small>Nhập 10 chữ số</small>
             </div>
@@ -197,7 +200,7 @@
         </form>
         
         <div class="login-link">
-            <p>Đã có tài khoản? <a href="{{ url_for('login') }}">Đăng nhập ngay</a></p>
+            <p>Đã có tài khoản? <a href="/login">Đăng nhập ngay</a></p>
         </div>
     </div>
 </body>

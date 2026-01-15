@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tư vấn Tâm lý - Học sinh</title>
+    <title>MINDBUDDY</title>
     <style>
         * {
             margin: 0;
@@ -13,8 +13,11 @@
         
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            background: linear-gradient(135deg, #c8e6c9 0%, #a5d6a7 100%);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
         
         .navbar {
@@ -25,14 +28,15 @@
             justify-content: space-between;
             align-items: center;
             box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            flex-shrink: 0;
         }
         
         .navbar h1 {
             font-size: 1.5rem;
-            color: #667eea;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            background: linear-gradient(135deg, #4fc3f7 0%, #66bb6a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         
         .navbar-right {
@@ -50,18 +54,15 @@
             color: white;
             text-decoration: none;
             padding: 0.6rem 1.2rem;
-            background: linear-gradient(135deg, #ff6b9d 0%, #c06595 100%);
+            background: linear-gradient(135deg, #4fc3f7 0%, #66bb6a 100%);
             border-radius: 25px;
             transition: all 0.3s;
             font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
         }
 
         .navbar-right .btn-pet:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 107, 157, 0.4);
+            box-shadow: 0 5px 15px rgba(79, 195, 247, 0.4);
         }
         
         .navbar a.btn-logout {
@@ -79,9 +80,11 @@
         }
         
         .container {
-            max-width: 900px;
-            margin: 2rem auto;
-            padding: 0 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+            overflow: hidden;
         }
         
         .chat-container {
@@ -89,17 +92,21 @@
             border-radius: 20px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.2);
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
         
         .chat-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #4fc3f7 0%, #66bb6a 100%);
             color: white;
-            padding: 2rem;
+            padding: 1.5rem;
             text-align: center;
+            flex-shrink: 0;
         }
         
         .chat-header h2 {
-            font-size: 2rem;
+            font-size: 1.8rem;
             margin-bottom: 0.5rem;
         }
         
@@ -108,10 +115,27 @@
             font-size: 1rem;
         }
         
+        .info-banner {
+            background: linear-gradient(135deg, #e1f5fe 0%, #e8f5e9 100%);
+            padding: 1rem 1.5rem;
+            border-left: 4px solid #66bb6a;
+            margin: 1rem 1.5rem 0;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            color: #555;
+            flex-shrink: 0;
+        }
+        
+        .info-banner strong {
+            display: block;
+            margin-bottom: 0.3rem;
+            color: #66bb6a;
+        }
+        
         .chat-box {
-            height: 500px;
+            flex: 1;
             overflow-y: auto;
-            padding: 2rem;
+            padding: 1.5rem;
             background: #f8f9fa;
         }
         
@@ -124,7 +148,7 @@
         }
         
         .chat-box::-webkit-scrollbar-thumb {
-            background: #667eea;
+            background: #66bb6a;
             border-radius: 4px;
         }
         
@@ -167,11 +191,11 @@
         }
         
         .message.student .message-header {
-            color: #667eea;
+            color: #4fc3f7;
         }
         
         .message.student .message-content {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #4fc3f7 0%, #66bb6a 100%);
             color: white;
             border-bottom-right-radius: 5px;
         }
@@ -183,7 +207,7 @@
         }
         
         .message.bot .message-header {
-            color: #27ae60;
+            color: #66bb6a;
         }
         
         .message.bot .message-content {
@@ -197,6 +221,7 @@
             padding: 1.5rem 2rem;
             background: white;
             border-top: 2px solid #f0f0f0;
+            flex-shrink: 0;
         }
         
         .chat-input {
@@ -208,7 +233,7 @@
         .chat-input input {
             flex: 1;
             padding: 1rem 1.5rem;
-            border: 2px solid #e0e0e0;
+            border: 2px solid #b3e5fc;
             border-radius: 25px;
             font-size: 1rem;
             transition: all 0.3s;
@@ -216,13 +241,13 @@
         
         .chat-input input:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: #4fc3f7;
+            box-shadow: 0 0 0 3px rgba(79, 195, 247, 0.1);
         }
         
         .btn-send {
             padding: 1rem 2rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #4fc3f7 0%, #66bb6a 100%);
             color: white;
             border: none;
             border-radius: 25px;
@@ -230,34 +255,15 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
         }
         
         .btn-send:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 5px 20px rgba(79, 195, 247, 0.4);
         }
         
         .btn-send:active {
             transform: translateY(0);
-        }
-        
-        .info-banner {
-            background: linear-gradient(135deg, #fff9e6 0%, #fff3cd 100%);
-            padding: 1rem 1.5rem;
-            border-left: 4px solid #f39c12;
-            margin-bottom: 1rem;
-            border-radius: 10px;
-            font-size: 0.9rem;
-            color: #856404;
-        }
-        
-        .info-banner strong {
-            display: block;
-            margin-bottom: 0.3rem;
-            color: #856404;
         }
         
         .typing-indicator {
@@ -278,7 +284,7 @@
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background: #667eea;
+            background: #66bb6a;
             margin: 0 2px;
             animation: typing 1.4s infinite;
         }
@@ -303,35 +309,33 @@
 </head>
 <body>
     <nav class="navbar">
-        <h1>💬 Tư vấn Tâm lý</h1>
+        <h1>MINDBUDDY, xin chào</h1>
         <div class="navbar-right">
-            <a href="{{ url_for('student_pet') }}" class="btn-pet">
-                🐾 Thú cưng
-            </a>
-            <span>👤 {{ name }}</span>
-            <a href="{{ url_for('logout') }}" class="btn-logout">Đăng xuất</a>
+            <a href="/student/pet" class="btn-pet">Thú cưng</a>
+            <span id="userName">Học sinh</span>
+            <a href="/logout" class="btn-logout">Đăng xuất</a>
         </div>
     </nav>
     
     <div class="container">
         <div class="chat-container">
             <div class="chat-header">
-                <h2>🧠 Trò chuyện với Chuyên viên Tâm lý</h2>
+                <h2>Trò chuyện với MINDBUDDY</h2>
                 <p>Hãy thoải mái chia sẻ những suy nghĩ và cảm xúc của bạn. Chúng tôi luôn sẵn sàng lắng nghe.</p>
             </div>
             
             <div class="info-banner">
-                <strong>🔒 Cam kết bảo mật</strong>
+                <strong>Cam kết bảo mật</strong>
                 Mọi cuộc trò chuyện của bạn đều được bảo mật. Chỉ có chuyên gia tâm lý mới có thể xem khi cần hỗ trợ bạn tốt hơn.
             </div>
             
             <div id="chatBox" class="chat-box">
                 <div class="message bot">
                     <div class="message-header">
-                        🩺 Chuyên viên tâm lý
+                        Chuyên viên tâm lý
                     </div>
                     <div class="message-content">
-                        Xin chào! Tôi là trợ lý tâm lý của trường. Bạn có thể chia sẻ bất cứ điều gì đang khiến bạn lo lắng, buồn bã hoặc muốn tâm sự. Đừng ngần ngại nhé - tôi ở đây để lắng nghe và hỗ trợ bạn! 💙
+                        Xin chào! Tôi là trợ lý tâm lý của trường. Bạn có thể chia sẻ bất cứ điều gì đang khiến bạn lo lắng, buồn bã hoặc muốn tâm sự. Đừng ngần ngại nhé - tôi ở đây để lắng nghe và hỗ trợ bạn!
                     </div>
                 </div>
                 
@@ -350,16 +354,49 @@
                         placeholder="Nhập tin nhắn của bạn..." 
                         onkeypress="if(event.key==='Enter') sendMessage()"
                     >
-                    <button class="btn-send" onclick="sendMessage()">
-                        <span>Gửi</span>
-                        <span>📤</span>
-                    </button>
+                    <button class="btn-send" onclick="sendMessage()">Gửi</button>
                 </div>
             </div>
         </div>
     </div>
     
     <script>
+        async function loadChatHistory() {
+            try {
+                const response = await fetch('/student/chat/history');
+                const data = await response.json();
+                
+                if (data.history && data.history.length > 0) {
+                    const chatBox = document.getElementById('chatBox');
+                    
+                    data.history.forEach(conv => {
+                        chatBox.innerHTML += `
+                            <div class="message student">
+                                <div class="message-header">
+                                    Bạn
+                                </div>
+                                <div class="message-content">
+                                    ${escapeHtml(conv.student_message)}
+                                </div>
+                            </div>
+                            <div class="message bot">
+                                <div class="message-header">
+                                    Chuyên viên tâm lý
+                                </div>
+                                <div class="message-content">
+                                    ${escapeHtml(conv.bot_response)}
+                                </div>
+                            </div>
+                        `;
+                    });
+                    
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                }
+            } catch (error) {
+                console.error('Lỗi tải lịch sử chat:', error);
+            }
+        }
+
         async function sendMessage() {
             const input = document.getElementById('messageInput');
             const message = input.value.trim();
@@ -368,11 +405,10 @@
             const chatBox = document.getElementById('chatBox');
             const typingIndicator = document.getElementById('typingIndicator');
             
-            // Hiển thị tin nhắn của học sinh
             chatBox.innerHTML += `
                 <div class="message student">
                     <div class="message-header">
-                        👤 Bạn
+                        Bạn
                     </div>
                     <div class="message-content">
                         ${escapeHtml(message)}
@@ -383,7 +419,6 @@
             input.value = '';
             chatBox.scrollTop = chatBox.scrollHeight;
             
-            // Hiển thị typing indicator
             typingIndicator.classList.add('active');
             chatBox.scrollTop = chatBox.scrollHeight;
             
@@ -396,14 +431,12 @@
                 
                 const data = await response.json();
                 
-                // Ẩn typing indicator
                 typingIndicator.classList.remove('active');
                 
-                // Hiển thị phản hồi từ bot
                 chatBox.innerHTML += `
                     <div class="message bot">
                         <div class="message-header">
-                            🩺 Chuyên viên tâm lý
+                            Chuyên viên tâm lý
                         </div>
                         <div class="message-content">
                             ${escapeHtml(data.response)}
@@ -416,7 +449,7 @@
                 chatBox.innerHTML += `
                     <div class="message bot">
                         <div class="message-header">
-                            ⚠️ Hệ thống
+                            Hệ thống
                         </div>
                         <div class="message-content">
                             Xin lỗi, đã có lỗi xảy ra. Vui lòng thử lại sau.
@@ -432,6 +465,8 @@
             div.textContent = text;
             return div.innerHTML;
         }
+
+        window.addEventListener('load', loadChatHistory);
     </script>
 </body>
 </html>

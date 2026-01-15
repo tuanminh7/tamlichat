@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Giáo viên - Cảnh báo Khẩn cấp</title>
+    <title>Giao vien - MINDBUDDY</title>
     <style>
         * {
             margin: 0;
@@ -53,7 +53,7 @@
         }
         
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 2rem auto;
             padding: 0 1.5rem;
         }
@@ -75,6 +75,53 @@
             color: #7f8c8d;
             font-size: 1rem;
         }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+
+        .stat-card h3 {
+            font-size: 2.5rem;
+            margin: 0.5rem 0;
+        }
+
+        .stat-card p {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .stat-normal { border-top: 4px solid #27ae60; }
+        .stat-normal h3 { color: #27ae60; }
+
+        .stat-stress { border-top: 4px solid #3498db; }
+        .stat-stress h3 { color: #3498db; }
+
+        .stat-anxiety { border-top: 4px solid #f39c12; }
+        .stat-anxiety h3 { color: #f39c12; }
+
+        .stat-depression { border-top: 4px solid #e67e22; }
+        .stat-depression h3 { color: #e67e22; }
+
+        .stat-crisis { border-top: 4px solid #e74c3c; }
+        .stat-crisis h3 { color: #e74c3c; }
         
         .alert-count {
             display: inline-block;
@@ -115,7 +162,7 @@
         .alert-header {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            justify-content: space-between;
             margin-bottom: 1.5rem;
             padding-bottom: 1rem;
             border-bottom: 2px solid #f8f9fa;
@@ -143,7 +190,7 @@
         
         .student-info {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 1rem;
             margin-bottom: 1.5rem;
         }
@@ -166,49 +213,28 @@
             color: #495057;
             font-size: 1.05rem;
         }
-        
-        .message-section {
-            background: #fff5f5;
-            padding: 1.5rem;
-            border-radius: 10px;
-            margin-bottom: 1.5rem;
-            border: 2px dashed #e74c3c;
-        }
-        
-        .message-section h4 {
-            color: #c0392b;
-            margin-bottom: 0.8rem;
-            font-size: 1.1rem;
-        }
-        
-        .message-content {
-            background: white;
+
+        .status-detail {
+            background: #fff9e6;
             padding: 1rem;
             border-radius: 8px;
-            color: #2c3e50;
+            margin-bottom: 1rem;
+            border-left: 3px solid #f39c12;
+        }
+
+        .status-detail p {
+            color: #856404;
+            font-size: 0.95rem;
             line-height: 1.6;
         }
-        
-        .analysis-section {
-            background: #fffbf0;
-            padding: 1.5rem;
-            border-radius: 10px;
-            margin-bottom: 1.5rem;
-        }
-        
-        .analysis-section h4 {
-            color: #f39c12;
-            margin-bottom: 0.8rem;
-            font-size: 1.1rem;
-        }
-        
+
         .keywords {
             display: flex;
             flex-wrap: wrap;
             gap: 0.5rem;
             margin-top: 0.5rem;
         }
-        
+
         .keyword {
             background: #e74c3c;
             color: white;
@@ -261,6 +287,51 @@
             color: #7f8c8d;
             font-size: 1.1rem;
         }
+
+        .section-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .section-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .student-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .student-item {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid;
+            transition: all 0.3s;
+        }
+
+        .student-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .student-item h4 {
+            margin-bottom: 0.8rem;
+            font-size: 1.1rem;
+        }
+
+        .student-item p {
+            font-size: 0.9rem;
+            color: #666;
+            margin: 0.3rem 0;
+        }
         
         .timestamp {
             color: #95a5a6;
@@ -273,88 +344,222 @@
 </head>
 <body>
     <nav class="navbar">
-        <h1>👨‍⚕️ Bảng điều khiển Giáo viên</h1>
+        <h1>Bang dieu khien Giao vien</h1>
         <div class="navbar-right">
             <span>{{ name }}</span>
-            <a href="{{ url_for('logout') }}">Đăng xuất</a>
+            <a href="{{ url_for('logout') }}">Dang xuat</a>
         </div>
     </nav>
     
     <div class="container">
         <div class="page-header">
             <h2>
-                🚨 Cảnh báo Khẩn cấp
-                {% if alerts %}
-                <span class="alert-count">{{ alerts|length }} trường hợp</span>
+                Thong ke Tam ly Hoc sinh
+            </h2>
+            <p>Tong quan tinh trang tam ly cua tat ca hoc sinh</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card stat-normal">
+                <p>Binh thuong</p>
+                <h3>{{ stats.normal }}</h3>
+            </div>
+            <div class="stat-card stat-stress">
+                <p>Stress</p>
+                <h3>{{ stats.stress }}</h3>
+            </div>
+            <div class="stat-card stat-anxiety">
+                <p>Lo au</p>
+                <h3>{{ stats.anxiety }}</h3>
+            </div>
+            <div class="stat-card stat-depression">
+                <p>Tram cam</p>
+                <h3>{{ stats.depression }}</h3>
+            </div>
+            <div class="stat-card stat-crisis">
+                <p>Nguykich</p>
+                <h3>{{ stats.crisis }}</h3>
+            </div>
+        </div>
+
+        <div class="page-header">
+            <h2>
+                Canh bao Khan cap
+                {% if alert_students %}
+                <span class="alert-count">{{ alert_students|length }} truong hop</span>
                 {% endif %}
             </h2>
-            <p>Học sinh cần can thiệp tâm lý ngay lập tức</p>
+            <p>Hoc sinh can can thiep tam ly ngay lap tuc</p>
         </div>
         
-        {% if alerts %}
-            {% for alert in alerts %}
+        {% if alert_students %}
+            {% for student in alert_students %}
             <div class="alert-card">
                 <div class="alert-header">
-                    <h3>🆘 Trường hợp khẩn cấp</h3>
-                    <span class="alert-badge">CẦN XỬ LÝ NGAY</span>
+                    <h3>Truong hop khan cap</h3>
+                    <span class="alert-badge">CAN XU LY NGAY</span>
                 </div>
                 
                 <div class="student-info">
                     <div class="info-item">
-                        <strong>👤 Họ và tên</strong>
-                        <p>{{ alert.student_info.name }}</p>
+                        <strong>Ma hoc sinh</strong>
+                        <p>{{ student.id }}</p>
                     </div>
                     <div class="info-item">
-                        <strong>🏫 Lớp</strong>
-                        <p>{{ alert.student_info.class }}</p>
+                        <strong>Ho va ten</strong>
+                        <p>{{ student.info.name }}</p>
                     </div>
                     <div class="info-item">
-                        <strong>📱 Số điện thoại</strong>
-                        <p>{{ alert.student_info.phone }}</p>
+                        <strong>Lop</strong>
+                        <p>{{ student.info.class }}</p>
+                    </div>
+                    <div class="info-item">
+                        <strong>So dien thoai</strong>
+                        <p>{{ student.info.phone }}</p>
                     </div>
                 </div>
                 
-                <div class="message-section">
-                    <h4>💬 Nội dung tin nhắn gây lo ngại</h4>
-                    <div class="message-content">
-                        "{{ alert.message }}"
-                    </div>
+                {% if student.alert_reason %}
+                <div class="status-detail">
+                    <p><strong>Ly do canh bao:</strong> {{ student.alert_reason }}</p>
                 </div>
-                
-                <div class="analysis-section">
-                    <h4>🔍 Phân tích tâm lý AI</h4>
-                    <p style="color: #555; line-height: 1.6;">{{ alert.analysis.reason }}</p>
-                    
-                    {% if alert.analysis.keywords %}
-                    <div style="margin-top: 1rem;">
-                        <strong style="color: #c0392b; font-size: 0.9rem;">⚠️ Từ khóa nguy hiểm phát hiện:</strong>
-                        <div class="keywords">
-                            {% for keyword in alert.analysis.keywords %}
+                {% endif %}
+
+                {% if student.keywords %}
+                <div style="margin-bottom: 1.5rem;">
+                    <strong style="color: #c0392b; font-size: 0.9rem;">Tu khoa phat hien:</strong>
+                    <div class="keywords">
+                        {% for status, kw_list in student.keywords.items() %}
+                            {% for keyword in kw_list %}
                             <span class="keyword">{{ keyword }}</span>
                             {% endfor %}
-                        </div>
+                        {% endfor %}
                     </div>
-                    {% endif %}
                 </div>
+                {% endif %}
                 
-                <a href="{{ url_for('teacher_intervene', student_id=alert.student_id) }}" class="btn-intervene">
-                    <span>🚑</span>
-                    <span>Can thiệp ngay lập tức</span>
+                <a href="{{ url_for('teacher_intervene', student_id=student.id) }}" class="btn-intervene">
+                    <span>Can thiep ngay lap tuc</span>
                 </a>
                 
+                {% if student.last_message_time %}
                 <div class="timestamp">
-                    ⏰ Thời gian phát hiện: {{ alert.timestamp }}
+                    Tin nhan cuoi: {{ student.last_message_time }} | Tong tin nhan: {{ student.total_messages }}
                 </div>
+                {% endif %}
             </div>
             {% endfor %}
         {% else %}
             <div class="no-alerts">
-                <div class="icon">✅</div>
-                <h3>Tuyệt vời!</h3>
-                <p>Hiện tại không có cảnh báo khẩn cấp nào</p>
-                <p style="margin-top: 1rem; font-size: 0.95rem;">Tất cả học sinh đang ở trạng thái tâm lý ổn định.</p>
+                <div class="icon">OK</div>
+                <h3>Tuyet voi!</h3>
+                <p>Hien tai khong co canh bao khan cap nao</p>
+                <p style="margin-top: 1rem; font-size: 0.95rem;">Tat ca hoc sinh dang o trang thai tam ly on dinh.</p>
             </div>
         {% endif %}
+
+        <div class="section-card">
+            <h3 style="color: #27ae60;">Hoc sinh Binh thuong ({{ stats.normal }})</h3>
+            {% if students.normal %}
+            <div class="student-grid">
+                {% for student in students.normal %}
+                <div class="student-item" style="border-left-color: #27ae60;">
+                    <h4>{{ student.info.name }}</h4>
+                    <p>Ma: {{ student.id }}</p>
+                    <p>Lop: {{ student.info.class }}</p>
+                    <p>Tin nhan: {{ student.total_messages }}</p>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p style="color: #7f8c8d;">Khong co hoc sinh nao</p>
+            {% endif %}
+        </div>
+
+        <div class="section-card">
+            <h3 style="color: #3498db;">Hoc sinh Stress ({{ stats.stress }})</h3>
+            {% if students.stress %}
+            <div class="student-grid">
+                {% for student in students.stress %}
+                <div class="student-item" style="border-left-color: #3498db;">
+                    <h4>{{ student.info.name }}</h4>
+                    <p>Ma: {{ student.id }}</p>
+                    <p>Lop: {{ student.info.class }}</p>
+                    <p>Tin nhan: {{ student.total_messages }}</p>
+                    {% if student.alert_reason %}
+                    <p style="color: #3498db; margin-top: 0.5rem; font-weight: 600;">{{ student.alert_reason }}</p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p style="color: #7f8c8d;">Khong co hoc sinh nao</p>
+            {% endif %}
+        </div>
+
+        <div class="section-card">
+            <h3 style="color: #f39c12;">Hoc sinh Lo au ({{ stats.anxiety }})</h3>
+            {% if students.anxiety %}
+            <div class="student-grid">
+                {% for student in students.anxiety %}
+                <div class="student-item" style="border-left-color: #f39c12;">
+                    <h4>{{ student.info.name }}</h4>
+                    <p>Ma: {{ student.id }}</p>
+                    <p>Lop: {{ student.info.class }}</p>
+                    <p>Tin nhan: {{ student.total_messages }}</p>
+                    {% if student.alert_reason %}
+                    <p style="color: #f39c12; margin-top: 0.5rem; font-weight: 600;">{{ student.alert_reason }}</p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p style="color: #7f8c8d;">Khong co hoc sinh nao</p>
+            {% endif %}
+        </div>
+
+        <div class="section-card">
+            <h3 style="color: #e67e22;">Hoc sinh Tram cam ({{ stats.depression }})</h3>
+            {% if students.depression %}
+            <div class="student-grid">
+                {% for student in students.depression %}
+                <div class="student-item" style="border-left-color: #e67e22;">
+                    <h4>{{ student.info.name }}</h4>
+                    <p>Ma: {{ student.id }}</p>
+                    <p>Lop: {{ student.info.class }}</p>
+                    <p>Tin nhan: {{ student.total_messages }}</p>
+                    {% if student.alert_reason %}
+                    <p style="color: #e67e22; margin-top: 0.5rem; font-weight: 600;">{{ student.alert_reason }}</p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p style="color: #7f8c8d;">Khong co hoc sinh nao</p>
+            {% endif %}
+        </div>
+
+        <div class="section-card">
+            <h3 style="color: #e74c3c;">Hoc sinh Nguy kich ({{ stats.crisis }})</h3>
+            {% if students.crisis %}
+            <div class="student-grid">
+                {% for student in students.crisis %}
+                <div class="student-item" style="border-left-color: #e74c3c; background: #fff5f5;">
+                    <h4>{{ student.info.name }}</h4>
+                    <p>Ma: {{ student.id }}</p>
+                    <p>Lop: {{ student.info.class }}</p>
+                    <p>So dien thoai: {{ student.info.phone }}</p>
+                    <p>Tin nhan: {{ student.total_messages }}</p>
+                    {% if student.alert_reason %}
+                    <p style="color: #e74c3c; margin-top: 0.5rem; font-weight: 600;">{{ student.alert_reason }}</p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p style="color: #7f8c8d;">Khong co hoc sinh nao</p>
+            {% endif %}
+        </div>
     </div>
 </body>
 </html>

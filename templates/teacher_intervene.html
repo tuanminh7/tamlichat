@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Can thiệp Tư vấn - Giáo viên</title>
+    <title>Can thiep Tu van - Giao vien</title>
     <style>
         * {
             margin: 0;
@@ -177,11 +177,19 @@
             border-color: #27ae60;
         }
         
-        .timeline-item.status-monitor::before {
+        .timeline-item.status-stress::before {
+            border-color: #3498db;
+        }
+
+        .timeline-item.status-anxiety::before {
             border-color: #f39c12;
         }
+
+        .timeline-item.status-depression::before {
+            border-color: #e67e22;
+        }
         
-        .timeline-item.status-danger::before {
+        .timeline-item.status-crisis::before {
             border-color: #e74c3c;
         }
         
@@ -189,11 +197,19 @@
             border-left: 4px solid #27ae60;
         }
         
-        .timeline-item.status-monitor {
+        .timeline-item.status-stress {
+            border-left: 4px solid #3498db;
+        }
+
+        .timeline-item.status-anxiety {
             border-left: 4px solid #f39c12;
         }
+
+        .timeline-item.status-depression {
+            border-left: 4px solid #e67e22;
+        }
         
-        .timeline-item.status-danger {
+        .timeline-item.status-crisis {
             border-left: 4px solid #e74c3c;
             background: #fff5f5;
         }
@@ -218,12 +234,22 @@
             color: #155724;
         }
         
-        .status-badge.monitor {
+        .status-badge.stress {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .status-badge.anxiety {
             background: #fff3cd;
             color: #856404;
         }
+
+        .status-badge.depression {
+            background: #ffe8d1;
+            color: #8a4c20;
+        }
         
-        .status-badge.danger {
+        .status-badge.crisis {
             background: #f8d7da;
             color: #721c24;
         }
@@ -251,6 +277,22 @@
             color: #95a5a6;
             font-size: 0.85rem;
             margin-top: 0.5rem;
+        }
+
+        .keywords {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .keyword {
+            background: #e74c3c;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
         }
         
         .action-section {
@@ -287,7 +329,7 @@
         }
         
         .action-list li::before {
-            content: '✓';
+            content: 'CHECK';
             display: inline-block;
             width: 25px;
             height: 25px;
@@ -296,6 +338,7 @@
             text-align: center;
             line-height: 25px;
             margin-right: 0.8rem;
+            font-size: 0.6rem;
         }
         
         .contact-info {
@@ -319,44 +362,44 @@
 </head>
 <body>
     <nav class="navbar">
-        <h1>🚑 Can thiệp Tâm lý Khẩn cấp</h1>
+        <h1>Can thiep Tam ly Khan cap</h1>
         <div class="navbar-right">
             <span>{{ session.name }}</span>
-            <a href="{{ url_for('logout') }}">Đăng xuất</a>
+            <a href="{{ url_for('logout') }}">Dang xuat</a>
         </div>
     </nav>
     
     <div class="container">
         <a href="{{ url_for('teacher_dashboard') }}" class="back-button">
-            ← Quay lại danh sách cảnh báo
+            Quay lai danh sach canh bao
         </a>
         
         <div class="card">
-            <h2>👨‍⚕️ Hồ sơ Can thiệp</h2>
+            <h2>Ho so Can thiep</h2>
             
             <div class="student-banner">
-                <h3>📋 Thông tin Học sinh</h3>
+                <h3>Thong tin Hoc sinh</h3>
                 <div class="student-info-grid">
                     <div class="info-box">
-                        <strong>Mã số</strong>
+                        <strong>Ma so</strong>
                         <p>{{ student_id }}</p>
                     </div>
                     <div class="info-box">
-                        <strong>Họ và tên</strong>
+                        <strong>Ho va ten</strong>
                         <p>{{ student_info.name }}</p>
                     </div>
                     <div class="info-box">
-                        <strong>Lớp</strong>
+                        <strong>Lop</strong>
                         <p>{{ student_info.class }}</p>
                     </div>
                     <div class="info-box">
-                        <strong>Số điện thoại</strong>
-                        <p>📞 {{ student_info.phone }}</p>
+                        <strong>So dien thoai</strong>
+                        <p>{{ student_info.phone }}</p>
                     </div>
                 </div>
             </div>
             
-            <h3 style="color: #2c3e50; margin-bottom: 1.5rem;">📜 Lịch sử Trò chuyện</h3>
+            <h3 style="color: #2c3e50; margin-bottom: 1.5rem;">Lich su Tro chuyen</h3>
             
             <div class="timeline">
                 {% for conv in conversation %}
@@ -367,25 +410,35 @@
                     </div>
                     
                     <div class="message-content">
-                        <strong>💬 Tin nhắn học sinh:</strong>
+                        <strong>Tin nhan hoc sinh:</strong>
                         <p>"{{ conv.student_message }}"</p>
                     </div>
                     
                     <div class="message-content">
-                        <strong>🤖 Phản hồi AI:</strong>
+                        <strong>Phan hoi AI:</strong>
                         <p>{{ conv.bot_response }}</p>
                     </div>
                     
                     {% if conv.status != 'normal' %}
                     <div style="margin-top: 1rem; padding: 1rem; background: rgba(0,0,0,0.03); border-radius: 8px;">
-                        <strong style="color: #{% if conv.status == 'danger' %}e74c3c{% else %}f39c12{% endif %};">
-                            🔍 Phân tích:
+                        <strong style="color: 
+                        {% if conv.status == 'crisis' %}#e74c3c
+                        {% elif conv.status == 'depression' %}#e67e22
+                        {% elif conv.status == 'anxiety' %}#f39c12
+                        {% elif conv.status == 'stress' %}#3498db
+                        {% endif %};">
+                            Phan tich:
                         </strong>
                         <p style="margin-top: 0.5rem; color: #666;">{{ conv.reason }}</p>
                         {% if conv.keywords %}
-                        <p style="margin-top: 0.5rem; font-size: 0.9rem;">
-                            <strong>Từ khóa:</strong> {{ conv.keywords|join(', ') }}
-                        </p>
+                        <div style="margin-top: 0.8rem;">
+                            <strong style="font-size: 0.9rem; color: #666;">Tu khoa phat hien:</strong>
+                            <div class="keywords">
+                                {% for keyword in conv.keywords %}
+                                <span class="keyword">{{ keyword }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
                         {% endif %}
                     </div>
                     {% endif %}
@@ -395,23 +448,23 @@
         </div>
         
         <div class="action-section">
-            <h3>🎯 Hướng dẫn Can thiệp</h3>
+            <h3>Huong dan Can thiep</h3>
             <div class="action-list">
                 <ul>
-                    <li>Liên hệ ngay với học sinh qua số điện thoại để đánh giá tình hình</li>
-                    <li>Lắng nghe tích cực, thể hiện sự đồng cảm và không phán xét</li>
-                    <li>Đánh giá mức độ nguy hiểm và ý định tự hại</li>
-                    <li>Thông báo cho phụ huynh nếu cần thiết</li>
-                    <li>Lên kế hoạch tư vấn dài hạn và theo dõi sát sao</li>
-                    <li>Ghi chép đầy đủ quá trình can thiệp</li>
+                    <li>Lien he ngay voi hoc sinh qua so dien thoai de danh gia tinh hinh</li>
+                    <li>Lang nghe tich cuc, the hien su dong cam va khong phan xet</li>
+                    <li>Danh gia muc do nguy hiem va y dinh tu hai</li>
+                    <li>Thong bao cho phu huynh neu can thiet</li>
+                    <li>Len ke hoach tu van dai han va theo doi sat sao</li>
+                    <li>Ghi chep day du qua trinh can thiep</li>
                 </ul>
             </div>
             
             <div class="contact-info">
-                <h4>📱 Liên hệ trực tiếp</h4>
+                <h4>Lien he truc tiep</h4>
                 <p>{{ student_info.phone }}</p>
                 <p style="font-size: 1rem; margin-top: 0.5rem; opacity: 0.9;">
-                    Gọi điện hoặc nhắn tin cho học sinh ngay để hỗ trợ kịp thời
+                    Goi dien hoac nhan tin cho hoc sinh ngay de ho tro kip thoi
                 </p>
             </div>
         </div>

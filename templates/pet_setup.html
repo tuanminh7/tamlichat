@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chọn Pet Của Bạn</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .setup-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 900px;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .setup-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .setup-header h1 {
+            color: #667eea;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .setup-header p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .pet-selection {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .pet-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+        }
+
+        .pet-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .pet-card.selected {
+            border-color: #667eea;
+            background: #e8ebff;
+        }
+
+        .pet-preview {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 15px;
+            background: #fff;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .pet-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .pet-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .pet-description {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .name-input-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+
+        .name-input-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .submit-button:hover {
+            transform: scale(1.02);
+        }
+
+        .submit-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .error-message {
+            color: #dc3545;
+            padding: 10px;
+            background: #ffe6e6;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .pet-selection {
+                grid-template-columns: 1fr;
+            }
+
+            .setup-container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="setup-container">
+        <div class="setup-header">
+            <h1>Chọn Pet Của Bạn</h1>
+            <p>Chọn một người bạn đồng hành và đặt tên cho pet của bạn</p>
+        </div>
+
+        <div class="error-message" id="errorMessage"></div>
+
+        <form method="POST" id="setupForm">
+            <div class="pet-selection">
+                <div class="pet-card" data-pet="dragon">
+                    <div class="pet-preview">
+                        <img src="/static/images/anh1.png" alt="Rồng">
+                    </div>
+                    <div class="pet-name">Rồng</div>
+                    <div class="pet-description">Mạnh mẽ và uy nghiêm</div>
+                    <input type="radio" name="pet_type" value="dragon" style="display: none;">
+                </div>
+
+                <div class="pet-card" data-pet="pikachu">
+                    <div class="pet-preview">
+                        <img src="/static/images/anh2.png" alt="Pikachu">
+                    </div>
+                    <div class="pet-name">Pikachu</div>
+                    <div class="pet-description">Năng động và đáng yêu</div>
+                    <input type="radio" name="pet_type" value="pikachu" style="display: none;">
+                </div>
+
+                <div class="pet-card" data-pet="capybara">
+                    <div class="pet-preview">
+                        <img src="/static/images/anh3.png" alt="Chim dory">
+                    </div>
+                    <div class="pet-name">Chim dory</div>
+                    <div class="pet-description">Bình yên và thân thiện</div>
+                    <input type="radio" name="pet_type" value="capybara" style="display: none;">
+                </div>
+            </div>
+
+            <div class="name-input-section">
+                <h3>Đặt Tên Cho Pet</h3>
+                <div class="input-group">
+                    <label for="petName">Tên pet của bạn:</label>
+                    <input 
+                        type="text" 
+                        id="petName" 
+                        name="pet_name" 
+                        placeholder="Ví dụ: Rồng Vàng, Pika Béo, dory Dễ Thương..."
+                        maxlength="30"
+                        required
+                    >
+                </div>
+                <button type="submit" class="submit-button" id="submitBtn" disabled>
+                    Bắt Đầu Nuôi Pet
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const petCards = document.querySelectorAll('.pet-card');
+        const submitBtn = document.getElementById('submitBtn');
+        const petNameInput = document.getElementById('petName');
+        const errorMessage = document.getElementById('errorMessage');
+        let selectedPet = null;
+
+        petCards.forEach(card => {
+            card.addEventListener('click', function() {
+                petCards.forEach(c => c.classList.remove('selected'));
+                this.classList.add('selected');
+                
+                const radio = this.querySelector('input[type="radio"]');
+                radio.checked = true;
+                selectedPet = radio.value;
+                
+                checkFormValid();
+            });
+        });
+
+        petNameInput.addEventListener('input', checkFormValid);
+
+        function checkFormValid() {
+            const petName = petNameInput.value.trim();
+            if (selectedPet && petName.length >= 2) {
+                submitBtn.disabled = false;
+            } else {
+                submitBtn.disabled = true;
+            }
+        }
+
+        document.getElementById('setupForm').addEventListener('submit', function(e) {
+            const petName = petNameInput.value.trim();
+            
+            if (!selectedPet) {
+                e.preventDefault();
+                showError('Vui lòng chọn một pet');
+                return;
+            }
+            
+            if (petName.length < 2) {
+                e.preventDefault();
+                showError('Tên pet phải có ít nhất 2 ký tự');
+                return;
+            }
+        });
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.classList.add('show');
+            setTimeout(() => {
+                errorMessage.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
