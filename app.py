@@ -85,74 +85,112 @@ def login_required(f):
             return redirect(url_for('login'))
         return f(*args, **kwargs)
     return decorated_function
-
+#############
 def analyze_mental_state(message, conversation_history):
     """
     Phân tích tâm lý và trả lời HOÀN TOÀN bằng AI
-    KHÔNG dùng template responses
+    CÓ NHỚ NGỮ CẢNH DÀI HẠN
     """
     
-    # Tạo context từ lịch sử
+    # ✅ TĂNG SỐ LƯỢNG TIN NHẮN LẤY TỪ LỊCH SỬ
+    # Lấy 10-15 tin nhắn gần nhất thay vì 5
+    recent = conversation_history[-15:] if len(conversation_history) > 15 else conversation_history
+    
+    # ✅ TẠO CONTEXT CHI TIẾT HƠN
     history_context = ""
     if conversation_history:
-        recent = conversation_history[-5:] if len(conversation_history) > 5 else conversation_history
-        history_context = "\n".join([
-            f"- Học sinh: {conv.get('student_message', '')}\n  Bot: {conv.get('bot_response', '')}"
-            for conv in recent
-        ])
+        # Thêm thông tin về status và keywords
+        context_lines = []
+        for idx, conv in enumerate(recent, 1):
+            status = conv.get('status', 'normal')
+            keywords = conv.get('keywords', [])
+            student_msg = conv.get('student_message', '')
+            bot_response = conv.get('bot_response', '')
+            
+            # Format chi tiết hơn
+            context_lines.append(
+                f"[{idx}] Học sinh: {student_msg}\n"
+                f"    Bot: {bot_response}\n"
+                f"    Tâm trạng: {status}"
+                f"{f' | Từ khóa: {', '.join(keywords)}' if keywords else ''}"
+            )
+        
+        history_context = "\n".join(context_lines)
     
+    # ✅ THÊM SUMMARY TỔNG QUAN
+    summary = ""
+    if len(conversation_history) >= 5:
+        # Đếm trạng thái trong lịch sử
+        status_count = {}
+        for conv in conversation_history[-10:]:
+            status = conv.get('status', 'normal')
+            status_count[status] = status_count.get(status, 0) + 1
+        
+        summary = "\n📊 TỔNG QUAN 10 TIN NHẮN GẦN NHẤT:\n"
+        if status_count:
+            for status, count in status_count.items():
+                summary += f"- {status}: {count} lần\n"
+    
+    # ✅ PROMPT CẢI TIẾN
     prompt = f"""
 Bạn là một người bạn thân thiết của học sinh - vừa hài hước, vừa ấm áp, vừa hiểu họ. 
 Bạn nói chuyện tự nhiên như Gen Z, thỉnh thoảng châm biếm nhẹ nhàng để tạo không khí thoải mái.
 
-LỊCH SỬ TRÒ CHUYỆN GÂN ĐÂY:
-{history_context if history_context else "(Chưa có lịch sử)"}
+⚠️ QUAN TRỌNG: BạN CÓ TRÍ NHỚ! Hãy nhớ những gì đã nói trước đó và TIẾP TỤC câu chuyện một cách tự nhiên.
+{summary}
 
-TIN NHẮN MỚI CỦA HỌC SINH: 
+📜 LỊCH SỬ TRÒ CHUYỆN (15 tin nhắn gần nhất):
+{history_context if history_context else "(Chưa có lịch sử - đây là tin nhắn đầu tiên)"}
+
+💬 TIN NHẮN MỚI CỦA HỌC SINH: 
 "{message}"
 
 NHIỆM VỤ:
-1. Phân tích tâm lý học sinh theo 5 mức độ
-2. Trả lời TỰ NHIÊN, KHÔNG GIỐNG CÂU TRƯỚC, như người bạn thật sự
+1. ĐỌC KỸ LỊCH SỬ - nhận biết ngữ cảnh, chủ đề đang nói
+2. Phân tích tâm lý học sinh theo 5 mức độ
+3. Trả lời TỰ NHIÊN, LIÊN KẾT với câu chuyện trước đó
 
 PHÂN LOẠI TÂM LÝ:
 - "normal": Bình thường, vui vẻ, không có vấn đề
-- "stress": Căng thẳng học tập (mệt mỏi, áp lực thi cử, deadline, sợ điểm kém, stress học tập)
-- "anxiety": Lo âu kéo dài (buồn chán dai dẳng, cô đơn, tự ti, mất ngủ nhiều ngày, suy nghĩ tiêu cực liên tục)
-- "depression": Trầm cảm nặng (tuyệt vọng, ghét bản thân, cuộc sống vô nghĩa, không muốn làm gì cả, mất hứng thú hoàn toàn)
-- "crisis": Nguy kịch (ý định tự tử, tự hại, muốn chết, không muốn sống nữa)
+- "stress": Căng thẳng học tập (mệt mỏi, áp lực thi cử, deadline, sợ điểm kém)
+- "anxiety": Lo âu kéo dài (buồn chán dai dẳng, cô đơn, tự ti, mất ngủ nhiều ngày)
+- "depression": Trầm cảm nặng (tuyệt vọng, ghét bản thân, cuộc sống vô nghĩa)
+- "crisis": Nguy kịch (ý định tự tử, tự hại, muốn chết)
 
 PHONG CÁCH TRẢ LỜI:
-- Normal/Stress: Thoải mái, hài hước, thỉnh thoảng trêu chọc nhẹ nhàng, hỏi han tự nhiên
-- Anxiety: Vẫn giữ giọng bạn bè nhưng thấu hiểu hơn, động viên chân thành, khuyến khích chia sẻ
-- Depression: Nghiêm túc hơn, thể hiện sự lo lắng thật sự, nhưng vẫn như người bạn đáng tin
-- Crisis: CỰC KỲ NGHIÊM TÚC, thể hiện lo lắng sâu sắc, khuyến khích tìm kiếm sự giúp đỡ ngay lập tức
+- Normal/Stress: Thoải mái, hài hước, thỉnh thoảng trêu chọc nhẹ nhàng
+- Anxiety: Vẫn giữ giọng bạn bè nhưng thấu hiểu hơn, động viên chân thành
+- Depression: Nghiêm túc hơn, thể hiện sự lo lắng thật sự
+- Crisis: CỰC KỲ NGHIÊM TÚC, thể hiện lo lắng sâu sắc
 
 QUY TẮC QUAN TRỌNG:
 1. TUYỆT ĐỐI không dùng "mày", "tao" 
-2. Câu trả lời PHẢI KHÁC với các câu trước đó trong lịch sử (nếu có)
-3. Phản hồi cụ thể với nội dung tin nhắn, KHÔNG chung chung
-4. Độ dài: 2-4 câu (trừ crisis có thể dài hơn)
-5. Nếu học sinh hỏi lại vấn đề tương tự, hãy đào sâu hơn, hỏi thêm chi tiết
+2. NẾU học sinh hỏi lại hoặc nhắc đến chủ đề CŨ → NHẮC LẠI và ĐÀO SÂU
+   VD: "À đúng rồi, hồi nãy bạn nói về [chủ đề]. Giờ thế nào rồi?"
+3. NẾU học sinh làm theo lời khuyên → KHEN NGỢI CỤ THỂ
+   VD: "Ê giỏi đấy! Bạn đã thử [việc gì] rồi à? Cảm giác thế nào?"
+4. NẾU câu hỏi liên quan đến tin nhắn trước → TRẢ LỜI TIẾP TỤC
+   VD: "Ừ, về việc [đó] mà bạn hỏi lúc nãy..."
+5. Độ dài: 2-4 câu (trừ crisis có thể dài hơn)
 
-VÍ DỤ PHONG CÁCH (CHỈ THAM KHẢO, KHÔNG SAO CHÉP):
-- Stress lần 1: "Ủa mệt thế? Học nhiều hay mệt vì crush không rep tin nhắn đây?"
-- Stress lần 2 (cùng chủ đề): "Thấy bạn cứ nói mệt hoài. Có phải áp lực học tập quá không? Hay có chuyện gì khác?"
-- Anxiety: "Ê này, buồn thế? Chuyện gì thế bạn ơi? Kể cho mình nghe đi."
-- Depression: "Nghe bạn nói như vậy mình lo lắm. Bạn cảm thấy thế này được bao lâu rồi?"
-- Crisis: "Dừng lại đã bạn ơi. Mình nghiêm túc đây, mình rất lo cho bạn. Chuyện gì xảy ra vậy? Hãy kể cho mình nghe, đừng tự mình gánh."
+VÍ DỤ LIÊN KẾT NGỮ CẢNH:
+- Lần 1: HS: "Mình stress quá" → Bot: "Ủa stress vì học hay gì?"
+- Lần 2: HS: "Vì thi cuối kỳ" → Bot: "À thi cuối kỳ. Môn nào khó nhất?"
+- Lần 3: HS: "Toán ý" → Bot: "Toán à? Bạn đã ôn chưa? Hay cần mình gợi ý cách học?"
+- Lần 4: HS: "Chưa ôn gì cả" → Bot: "Ơ sao không ôn? Còn mấy ngày nữa thi?"
 
 TRẢ VỀ JSON (BẮT BUỘC):
 {{
     "status": "normal/stress/anxiety/depression/crisis",
-    "reason": "Lý do đánh giá ngắn gọn (1 câu)",
+    "reason": "Lý do đánh giá (VÍ DỤ: 'Tiếp tục nói về áp lực thi cử đã đề cập lúc trước')",
     "keywords": ["từ khóa phát hiện"],
-    "response": "Câu trả lời TỰ NHIÊN, CỤ THỂ với tin nhắn của học sinh"
+    "response": "Câu trả lời TỰ NHIÊN, LIÊN KẾT với lịch sử hội thoại"
 }}
 
-CHÚ Ý: 
-- "response" phải cụ thể với tin nhắn, KHÔNG được chung chung
-- Nếu học sinh nhắn lại nội dung tương tự, hãy đào sâu vấn đề thay vì lặp lại câu cũ
+CHÚ Ý LIÊN KẾT: 
+- Nếu học sinh hỏi "còn việc X thì sao?" → Nhắc lại việc X từ lịch sử
+- Nếu học sinh nói "mình làm rồi" → Hỏi cảm giác sau khi làm
+- Nếu học sinh thay đổi chủ đề đột ngột → Ghi nhận nhưng vẫn hỏi thăm
 """
     
     max_retries = 3
@@ -187,7 +225,6 @@ CHÚ Ý:
                 time.sleep(1)
                 continue
             else:
-                # FALLBACK: Dùng AI đơn giản hơn
                 return fallback_simple_ai_response(message, conversation_history)
                 
         except Exception as e:
@@ -197,7 +234,6 @@ CHÚ Ý:
                 time.sleep(1)
                 continue
             else:
-                # FALLBACK: Dùng AI đơn giản hơn
                 return fallback_simple_ai_response(message, conversation_history)
 
 

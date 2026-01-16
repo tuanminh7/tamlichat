@@ -83,6 +83,37 @@
           "tự sát",
           "không tự sát"
         ]
+      },
+      {
+        "timestamp": "2026-01-16T23:33:35.411330",
+        "student_message": "nay tôi vui quá",
+        "bot_response": "Ơ kìa, gì mà 'nay tôi vui quá' bất thình lình vậy? Nghe mà mình giật mình luôn á! Từ 'tôi muốn tự sát' nhảy phát qua 'vui quá' làm mình thấy hơi 'rén' đó bạn ơi. Hay là bạn đang cố 'bẻ lái' mình hả? Chuyện lúc nãy vẫn còn làm mình lo lắm đó.",
+        "status": "anxiety",
+        "reason": "Học sinh đột ngột vui vẻ sau khi bày tỏ ý định tự sát có thể là dấu hiệu của sự bất ổn cảm xúc hoặc né tránh vấn đề.",
+        "keywords": [
+          "vui quá"
+        ]
+      },
+      {
+        "timestamp": "2026-01-16T23:54:38.443867",
+        "student_message": "tôi đang thấy trống rỗng",
+        "bot_response": "Ê bạn ơi, nghe bạn nói 'trống rỗng' tự nhiên làm mình nhớ lúc nãy bạn bảo 'vui quá' mà mình đã hơi 'rén' rồi đó. Thật sự nghe đến 'trống rỗng' là mình thấy lo liền, cảm giác đó chắc chắn không dễ chịu chút nào đâu ha. Bạn có muốn kể mình nghe thêm không? Sao bạn lại cảm thấy như vậy? Mình ở đây lắng nghe nè, không phán xét gì đâu nha.",
+        "status": "depression",
+        "reason": "Học sinh bày tỏ cảm giác 'trống rỗng', một dấu hiệu của sự mất kết nối, vô nghĩa, và thường gắn liền với trầm cảm, đặc biệt sau những tin nhắn về ý định tự sát trước đó. Đây là một trạng thái cảm xúc nghiêm trọng hơn lo âu thông thường.",
+        "keywords": [
+          "trống rỗng"
+        ]
+      },
+      {
+        "timestamp": "2026-01-16T23:55:10.096898",
+        "student_message": "đang thất tình á",
+        "bot_response": "À ra vậy! Nghe bạn nói 'thất tình' là mình hiểu ngay tại sao bạn lại cảm thấy 'trống rỗng' rồi đó. Trời ơi, cái cảm giác này đúng là 'hút cạn năng lượng' thiệt chứ, mình biết nó không dễ chịu chút nào đâu. Bạn có muốn kể mình nghe không? Chuyện gì đã xảy ra vậy bạn?",
+        "status": "depression",
+        "reason": "Học sinh giải thích lý do cho cảm giác 'trống rỗng' trước đó là do 'thất tình', đây là một nguyên nhân sâu sắc gây đau khổ và phù hợp với mức độ trầm cảm. Bot cần thể hiện sự thấu hiểu và lắng nghe nghiêm túc.",
+        "keywords": [
+          "thất tình",
+          "trống rỗng"
+        ]
       }
     ]
   },
@@ -161,16 +192,68 @@
       "pet_type": "dragon",
       "pet_name": "bi béo",
       "level": 1,
-      "health": 10,
-      "mood": "good",
-      "total_care_count": 0,
-      "chat_count": 7,
+      "health": 100,
+      "mood": "happy",
+      "total_care_count": 8,
+      "chat_count": 10,
       "days_at_100_health": 0,
-      "last_100_health_date": null,
-      "consecutive_days_100": 0,
+      "last_100_health_date": "2026-01-16",
+      "consecutive_days_100": 1,
       "level_up_history": [],
       "created_at": "2026-01-16T23:10:25.750753",
-      "last_updated": "2026-01-16T23:24:02.929865"
+      "last_updated": "2026-01-16T23:57:12.253657"
     }
+  },
+  "task_history": {
+    "test1": [
+      {
+        "task_id": "plant_care",
+        "task_name": "Trồng cây hoặc chăm sóc cây",
+        "health_bonus": 20,
+        "completed_at": "2026-01-16T23:55:45.398382"
+      },
+      {
+        "task_id": "stretch",
+        "task_name": "Vươn vai giãn cơ",
+        "health_bonus": 5,
+        "completed_at": "2026-01-16T23:55:46.407034"
+      },
+      {
+        "task_id": "wash_face",
+        "task_name": "Rửa mặt lạnh",
+        "health_bonus": 5,
+        "completed_at": "2026-01-16T23:55:46.997744"
+      },
+      {
+        "task_id": "watch_funny",
+        "task_name": "Xem video vui 5 phút",
+        "health_bonus": 10,
+        "completed_at": "2026-01-16T23:55:47.805649"
+      },
+      {
+        "task_id": "read_positive",
+        "task_name": "Đọc 1 câu chuyện tích cực",
+        "health_bonus": 10,
+        "completed_at": "2026-01-16T23:55:48.398288"
+      },
+      {
+        "task_id": "plant_care",
+        "task_name": "Trồng cây hoặc chăm sóc cây",
+        "health_bonus": 20,
+        "completed_at": "2026-01-16T23:55:49.173387"
+      },
+      {
+        "task_id": "draw_something",
+        "task_name": "Vẽ hoặc tô màu",
+        "health_bonus": 15,
+        "completed_at": "2026-01-16T23:55:50.173583"
+      },
+      {
+        "task_id": "drink_water",
+        "task_name": "Uống 1 cốc nước",
+        "health_bonus": 5,
+        "completed_at": "2026-01-16T23:55:54.669306"
+      }
+    ]
   }
 }
