@@ -6,7 +6,7 @@ import hashlib
 import google.generativeai as genai
 from dotenv import load_dotenv
 import os
-
+import time
 load_dotenv()
 ###
 
@@ -77,9 +77,6 @@ def load_data():
 def save_data(data):
     with open(DATA_FILE, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
-def save_data(data):
-    with open(DATA_FILE, 'w', encoding='utf-8') as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
 
 def login_required(f):
     @wraps(f)
@@ -90,122 +87,337 @@ def login_required(f):
     return decorated_function
 
 def analyze_mental_state(message, conversation_history):
-    prompt = f"""
-    Bạn là một người bạn thân thiết của học sinh - vừa hài hước, vừa ấm áp, vừa hiểu họ. Bạn nói chuyện tự nhiên như Gen Z, thỉnh thoảng châm biếm nhẹ nhàng để tạo không khí thoải mái.
-    
-    Tin nhắn mới: {message}
-    
-    Lịch sử trò chuyện: {conversation_history[-5:] if len(conversation_history) > 5 else conversation_history}
-    
-    Nhiệm vụ của bạn:
-    1. Phân tích tâm lý học sinh theo 5 mức độ
-    2. Trả lời như một người bạn thân - thoải mái, không hề cứng nhắc hay sáo rỗng
-    
-    Phân loại:
-    - "normal": Bình thường, vui vẻ
-    - "stress": Căng thẳng học tập (mệt mỏi, áp lực thi cử, deadline, sợ điểm kém)
-    - "anxiety": Lo âu kéo dài (buồn chán, cô đơn, tự ti, mất ngủ, suy nghĩ tiêu cực)
-    - "depression": Trầm cảm nặng (tuyệt vọng, ghét bản thân, vô nghĩa, không muốn làm gì)
-    - "crisis": Nguy kịch (tự tử, tự hại, muốn chết, không muốn sống)
-    
-    Phong cách trả lời:
-    - Normal/Stress: Thoải mái, hài hước, thỉnh thoảng trêu chọc nhẹ nhàng
-    - Anxiety: Vẫn giữ giọng bạn bè nhưng thấu hiểu, động viên chân thành
-    - Depression/Crisis: Nghiêm túc hơn, thể hiện sự lo lắng thật sự, nhưng vẫn như người bạn đáng tin
-    
-    VÍ DỤ:
-    - "Mình mệt quá": "Ủa mệt thế? Học nhiều hay mệt vì crush không rep tin nhắn đây? Kể nghe nào!"
-    - "Sắp thi rồi stress lắm": "Ờ thì ai chả stress, nhưng mà lo cũng không làm đề dễ hơn đâu nha. Cần mình giúp gì không, học chung hay động viên tinh thần gì đó?"
-    - "Buồn quá không muốn làm gì": "Ê này, buồn thế? Chuyện gì thế bạn ơi? Kể cho mình nghe đi, đừng một mình gánh nha."
-    - "Muốn chết quá": "Dừng lại đã. Mình nghiêm túc đây, mình rất lo cho bạn. Chuyện gì xảy ra vậy? Đừng giữ trong lòng, mình sẽ ở đây với bạn. Gọi cho mình ngay được không?"
-    
-    QUAN TRỌNG: Không dùng "mày", "tao" trong câu trả lời.
-    
-    Trả về JSON:
-    {{
-        "status": "normal/stress/anxiety/depression/crisis",
-        "reason": "Lý do đánh giá ngắn gọn",
-        "keywords": ["từ khóa phát hiện"],
-        "response": "Câu trả lời TỰ NHIÊN, KHÔNG RÒ RỌC, như người bạn thật sự"
-    }}
+    """
+    Phân tích tâm lý và trả lời HOÀN TOÀN bằng AI
+    KHÔNG dùng template responses
     """
     
+    # Tạo context từ lịch sử
+    history_context = ""
+    if conversation_history:
+        recent = conversation_history[-5:] if len(conversation_history) > 5 else conversation_history
+        history_context = "\n".join([
+            f"- Học sinh: {conv.get('student_message', '')}\n  Bot: {conv.get('bot_response', '')}"
+            for conv in recent
+        ])
+    
+    prompt = f"""
+Bạn là một người bạn thân thiết của học sinh - vừa hài hước, vừa ấm áp, vừa hiểu họ. 
+Bạn nói chuyện tự nhiên như Gen Z, thỉnh thoảng châm biếm nhẹ nhàng để tạo không khí thoải mái.
+
+LỊCH SỬ TRÒ CHUYỆN GÂN ĐÂY:
+{history_context if history_context else "(Chưa có lịch sử)"}
+
+TIN NHẮN MỚI CỦA HỌC SINH: 
+"{message}"
+
+NHIỆM VỤ:
+1. Phân tích tâm lý học sinh theo 5 mức độ
+2. Trả lời TỰ NHIÊN, KHÔNG GIỐNG CÂU TRƯỚC, như người bạn thật sự
+
+PHÂN LOẠI TÂM LÝ:
+- "normal": Bình thường, vui vẻ, không có vấn đề
+- "stress": Căng thẳng học tập (mệt mỏi, áp lực thi cử, deadline, sợ điểm kém, stress học tập)
+- "anxiety": Lo âu kéo dài (buồn chán dai dẳng, cô đơn, tự ti, mất ngủ nhiều ngày, suy nghĩ tiêu cực liên tục)
+- "depression": Trầm cảm nặng (tuyệt vọng, ghét bản thân, cuộc sống vô nghĩa, không muốn làm gì cả, mất hứng thú hoàn toàn)
+- "crisis": Nguy kịch (ý định tự tử, tự hại, muốn chết, không muốn sống nữa)
+
+PHONG CÁCH TRẢ LỜI:
+- Normal/Stress: Thoải mái, hài hước, thỉnh thoảng trêu chọc nhẹ nhàng, hỏi han tự nhiên
+- Anxiety: Vẫn giữ giọng bạn bè nhưng thấu hiểu hơn, động viên chân thành, khuyến khích chia sẻ
+- Depression: Nghiêm túc hơn, thể hiện sự lo lắng thật sự, nhưng vẫn như người bạn đáng tin
+- Crisis: CỰC KỲ NGHIÊM TÚC, thể hiện lo lắng sâu sắc, khuyến khích tìm kiếm sự giúp đỡ ngay lập tức
+
+QUY TẮC QUAN TRỌNG:
+1. TUYỆT ĐỐI không dùng "mày", "tao" 
+2. Câu trả lời PHẢI KHÁC với các câu trước đó trong lịch sử (nếu có)
+3. Phản hồi cụ thể với nội dung tin nhắn, KHÔNG chung chung
+4. Độ dài: 2-4 câu (trừ crisis có thể dài hơn)
+5. Nếu học sinh hỏi lại vấn đề tương tự, hãy đào sâu hơn, hỏi thêm chi tiết
+
+VÍ DỤ PHONG CÁCH (CHỈ THAM KHẢO, KHÔNG SAO CHÉP):
+- Stress lần 1: "Ủa mệt thế? Học nhiều hay mệt vì crush không rep tin nhắn đây?"
+- Stress lần 2 (cùng chủ đề): "Thấy bạn cứ nói mệt hoài. Có phải áp lực học tập quá không? Hay có chuyện gì khác?"
+- Anxiety: "Ê này, buồn thế? Chuyện gì thế bạn ơi? Kể cho mình nghe đi."
+- Depression: "Nghe bạn nói như vậy mình lo lắm. Bạn cảm thấy thế này được bao lâu rồi?"
+- Crisis: "Dừng lại đã bạn ơi. Mình nghiêm túc đây, mình rất lo cho bạn. Chuyện gì xảy ra vậy? Hãy kể cho mình nghe, đừng tự mình gánh."
+
+TRẢ VỀ JSON (BẮT BUỘC):
+{{
+    "status": "normal/stress/anxiety/depression/crisis",
+    "reason": "Lý do đánh giá ngắn gọn (1 câu)",
+    "keywords": ["từ khóa phát hiện"],
+    "response": "Câu trả lời TỰ NHIÊN, CỤ THỂ với tin nhắn của học sinh"
+}}
+
+CHÚ Ý: 
+- "response" phải cụ thể với tin nhắn, KHÔNG được chung chung
+- Nếu học sinh nhắn lại nội dung tương tự, hãy đào sâu vấn đề thay vì lặp lại câu cũ
+"""
+    
+    max_retries = 3
+    
+    for attempt in range(max_retries):
+        try:
+            response = model.generate_content(prompt)
+            response_text = response.text.strip()
+            
+            # Clean JSON markers
+            response_text = response_text.replace('```json', '').replace('```', '').strip()
+            
+            # Parse JSON
+            result = json.loads(response_text)
+            
+            # VALIDATE OUTPUT
+            if not validate_ai_response(result, message):
+                print(f"⚠️ AI response không hợp lệ (attempt {attempt + 1}): {result}")
+                if attempt < max_retries - 1:
+                    time.sleep(1)
+                    continue
+                else:
+                    raise ValueError("AI response validation failed after all retries")
+            
+            return result
+            
+        except json.JSONDecodeError as e:
+            print(f"❌ JSON parse error (attempt {attempt + 1}): {str(e)}")
+            print(f"Response text: {response_text[:200]}")
+            
+            if attempt < max_retries - 1:
+                time.sleep(1)
+                continue
+            else:
+                # FALLBACK: Dùng AI đơn giản hơn
+                return fallback_simple_ai_response(message, conversation_history)
+                
+        except Exception as e:
+            print(f"❌ AI error (attempt {attempt + 1}): {str(e)}")
+            
+            if attempt < max_retries - 1:
+                time.sleep(1)
+                continue
+            else:
+                # FALLBACK: Dùng AI đơn giản hơn
+                return fallback_simple_ai_response(message, conversation_history)
+
+
+def validate_ai_response(result, original_message):
+    """
+    Validate AI response để đảm bảo chất lượng
+    """
+    required_keys = ['status', 'reason', 'keywords', 'response']
+    valid_statuses = ['normal', 'stress', 'anxiety', 'depression', 'crisis']
+    
+    # 1. Check required keys
+    if not all(key in result for key in required_keys):
+        print(f"⚠️ Missing keys: {set(required_keys) - set(result.keys())}")
+        return False
+    
+    # 2. Check status validity
+    if result['status'] not in valid_statuses:
+        print(f"⚠️ Invalid status: {result['status']}")
+        return False
+    
+    # 3. Check response length
+    response_length = len(result['response'])
+    if response_length < 10:
+        print(f"⚠️ Response too short: {response_length} chars")
+        return False
+    
+    if response_length > 1000:
+        print(f"⚠️ Response too long: {response_length} chars")
+        result['response'] = result['response'][:1000] + "..."
+    
+    # 4. Check keywords is list
+    if not isinstance(result['keywords'], list):
+        print(f"⚠️ Keywords is not list: {type(result['keywords'])}")
+        return False
+    
+    # 5. Check response không chứa "mày" hoặc "tao"
+    response_lower = result['response'].lower()
+    if 'mày' in response_lower or 'tao' in response_lower:
+        print(f"⚠️ Response contains inappropriate words")
+        return False
+    
+    # 6. Check response không phải placeholder
+    placeholders = ['[placeholder]', '[...]', 'xxx', 'yyy']
+    if any(p in response_lower for p in placeholders):
+        print(f"⚠️ Response contains placeholders")
+        return False
+    
+    return True
+
+
+def fallback_simple_ai_response(message, conversation_history):
+    """
+    FALLBACK: Nếu AI format phức tạp lỗi, 
+    dùng prompt đơn giản hơn NHƯNG VẪN là AI
+    """
+    
+    # Detect keywords để classify (backup)
+    detected_status, found_keywords = detect_keywords_backup(message)
+    
+    # Tạo context ngắn gọn
+    recent_context = ""
+    if conversation_history:
+        last_conv = conversation_history[-1] if conversation_history else None
+        if last_conv:
+            recent_context = f"\nTin nhắn trước: {last_conv.get('student_message', '')}"
+    
+    # Prompt đơn giản, KHÔNG yêu cầu JSON
+    simple_prompt = f"""
+Bạn là bạn thân của học sinh.{recent_context}
+
+Học sinh vừa nói: "{message}"
+
+Tâm trạng học sinh: {get_mood_description(detected_status)}
+
+Hãy trả lời ngắn gọn (2-3 câu) như người bạn thật sự.
+{"⚠️ HỌC SINH CÓ DẤU HIỆU NGUY HIỂM - hãy thể hiện lo lắng nghiêm túc và khuyến khích tìm kiếm sự giúp đỡ!" if detected_status == 'crisis' else ""}
+
+QUY TẮC:
+- Không dùng "mày", "tao"
+- Phản hồi cụ thể với tin nhắn
+- Tự nhiên như chat với bạn
+"""
+    
     try:
-        response = model.generate_content(prompt)
-        result = json.loads(response.text.replace('```json', '').replace('```', '').strip())
-        return result
-    except Exception as e:
-        crisis_keywords = [
-            'tự sát', 'tự tử', 'muốn chết', 'kết thúc cuộc đời', 'tự hại', 
-            'tự làm đau mình', 'cắt tay', 'nhảy lầu', 'không muốn sống nữa', 
-            'thà chết', 'chết đi cho rồi', 'tự kết liễu', 'tự vẫn', 
-            'uống thuốc độc', 'tự sát tập thể', 'nhảy xuống', 'treo cổ'
-        ]
+        response = model.generate_content(simple_prompt)
+        ai_response = response.text.strip()
         
-        depression_keywords = [
-            'trầm cảm', 'tuyệt vọng', 'vô nghĩa', 'muốn biến mất', 
-            'không muốn làm gì cả', 'ghét bản thân', 'tự ghét', 
-            'muốn ngủ mãi', 'cuộc sống vô ích', 'sống để làm gì',
-            'không còn hy vọng', 'bất lực hoàn toàn', 'cuộc đời tệ hại'
-        ]
+        # Validate response có ý nghĩa
+        if len(ai_response) < 10 or len(ai_response) > 1000:
+            raise ValueError("Response length invalid")
         
-        anxiety_keywords = [
-            'buồn chán kéo dài', 'cô đơn quá', 'không vui được', 
-            'chán nản mãi', 'mất hứng thú hoàn toàn', 'suy nghĩ tiêu cực liên tục', 
-            'tự ti nặng', 'vô dụng hoàn toàn', 'thất bại liên tục', 
-            'không ai hiểu mình', 'trống rỗng bên trong', 'mất ngủ nhiều ngày',
-            'ác mộng liên tục', 'sợ hãi không lý do'
-        ]
-        
-        stress_keywords = [
-            'mệt mỏi với học', 'áp lực học tập', 'kiểm tra nhiều', 
-            'thi cử căng thẳng', 'bài tập chồng chất', 'deadline dí', 
-            'lo lắng về điểm', 'sợ điểm kém', 'căng thẳng học', 
-            'stress vì học', 'áp lực từ gia đình'
-        ]
-        
-        message_lower = message.lower()
-        
-        found_keywords = []
-        detected_status = 'normal'
-        
-        for keyword in crisis_keywords:
-            if keyword in message_lower:
-                found_keywords.append(keyword)
-                detected_status = 'crisis'
-        
-        if detected_status == 'normal':
-            for keyword in depression_keywords:
-                if keyword in message_lower:
-                    found_keywords.append(keyword)
-                    detected_status = 'depression'
-        
-        if detected_status == 'normal':
-            for keyword in anxiety_keywords:
-                if keyword in message_lower:
-                    found_keywords.append(keyword)
-                    detected_status = 'anxiety'
-        
-        if detected_status == 'normal':
-            for keyword in stress_keywords:
-                if keyword in message_lower:
-                    found_keywords.append(keyword)
-                    detected_status = 'stress'
-        
-        responses = {
-            'crisis': "Dừng lại đã bạn ơi. Mình nghiêm túc đây, mình rất lo cho bạn. Mình biết bạn đang đau khổ lắm, nhưng đừng tự mình gánh chuyện này. Mình muốn giúp bạn, và có nhiều người muốn giúp bạn. Bạn có thể gọi cho mình hoặc gặp mặt ngay bây giờ không? Mình sẽ ở bên bạn.",
-            'depression': f"Ê bạn, nghe bạn nói thế mình lo lắm. Cảm giác này không phải là lỗi của bạn đâu, nhưng bạn cần được giúp đỡ. Mình ở đây, và chúng ta sẽ cùng tìm cách vượt qua chuyện này. Kể cho mình nghe chuyện gì đang xảy ra với bạn đi?",
-            'anxiety': f"Thấy bạn như vậy mình buồn lắm. Bạn biết không, cảm giác này rất nhiều người trải qua, và nó có thể được giải quyết. Bạn muốn kể cho mình nghe chuyện gì đang làm bạn cảm thấy như vậy không? Mình sẽ lắng nghe hết đấy.",
-            'stress': f"Ủa căng thẳng hả? Ờ thì ai học hành mà chả thế. Nhưng mà lo nhiều quá cũng không tốt đâu nha. Kể cho mình nghe cụ thể đi, mình xem giúp được gì cho bạn không. Đừng tự dồn nén trong lòng!",
-            'normal': "Ơ kìa, nói gì đó đi! Mình nghe đây này. Có chuyện gì vui hay buồn cứ chia sẻ thoải mái nha!"
-        }
+        if 'mày' in ai_response.lower() or 'tao' in ai_response.lower():
+            raise ValueError("Response contains inappropriate words")
         
         return {
             "status": detected_status,
-            "reason": f"Phát hiện từ khóa: {', '.join(found_keywords)}" if found_keywords else f"Lỗi phân tích AI ({str(e)}), không phát hiện từ khóa tiêu cực",
+            "reason": f"Phát hiện từ khóa: {', '.join(found_keywords)}" if found_keywords else "Phân tích ngữ cảnh",
             "keywords": found_keywords,
-            "response": responses[detected_status]
+            "response": ai_response
         }
+        
+    except Exception as e:
+        print(f"❌ Fallback AI cũng lỗi: {str(e)}")
+        # CUỐI CÙNG: Emergency response - VẪN TỰ NHIÊN
+        return get_emergency_response(detected_status, message)
+
+
+def detect_keywords_backup(message):
+    """
+    Backup keyword detection khi AI lỗi
+    CHỈ dùng để classify, KHÔNG dùng để generate response
+    """
+    crisis_keywords = [
+        'tự sát', 'tự tử', 'muốn chết', 'kết thúc cuộc đời', 'tự hại', 
+        'tự làm đau mình', 'cắt tay', 'nhảy lầu', 'không muốn sống nữa', 
+        'thà chết', 'chết đi cho rồi', 'tự kết liễu', 'tự vẫn'
+    ]
+    
+    depression_keywords = [
+        'trầm cảm', 'tuyệt vọng', 'vô nghĩa', 'muốn biến mất', 
+        'không muốn làm gì cả', 'ghét bản thân', 'tự ghét', 
+        'cuộc sống vô ích', 'sống để làm gì', 'không còn hy vọng'
+    ]
+    
+    anxiety_keywords = [
+        'buồn chán kéo dài', 'cô đơn quá', 'không vui được', 
+        'chán nản', 'mất hứng thú', 'suy nghĩ tiêu cực', 
+        'tự ti', 'thất bại', 'mất ngủ'
+    ]
+    
+    stress_keywords = [
+        'mệt mỏi', 'áp lực', 'căng thẳng', 'stress', 
+        'kiểm tra', 'thi cử', 'deadline', 'bài tập nhiều'
+    ]
+    
+    message_lower = message.lower()
+    found_keywords = []
+    detected_status = 'normal'
+    
+    # Cascade detection
+    for keyword in crisis_keywords:
+        if keyword in message_lower:
+            found_keywords.append(keyword)
+            detected_status = 'crisis'
+    
+    if detected_status == 'normal':
+        for keyword in depression_keywords:
+            if keyword in message_lower:
+                found_keywords.append(keyword)
+                detected_status = 'depression'
+    
+    if detected_status == 'normal':
+        for keyword in anxiety_keywords:
+            if keyword in message_lower:
+                found_keywords.append(keyword)
+                detected_status = 'anxiety'
+    
+    if detected_status == 'normal':
+        for keyword in stress_keywords:
+            if keyword in message_lower:
+                found_keywords.append(keyword)
+                detected_status = 'stress'
+    
+    return detected_status, found_keywords
+
+
+def get_mood_description(status):
+    """Mô tả tâm trạng cho AI hiểu"""
+    descriptions = {
+        'normal': 'bình thường, vui vẻ',
+        'stress': 'căng thẳng học tập, áp lực',
+        'anxiety': 'lo âu, buồn chán kéo dài',
+        'depression': 'trầm cảm, tuyệt vọng',
+        'crisis': 'NGUY KỊCH - có dấu hiệu tự hại'
+    }
+    return descriptions.get(status, 'không xác định')
+
+
+def get_emergency_response(status, message):
+    """
+    EMERGENCY ONLY: Khi cả AI chính lẫn fallback đều lỗi
+    Tạo response "tự nhiên nhất có thể" dựa trên template NHƯNG inject message
+    """
+    import random
+    
+    # Lấy từ khóa chính từ message
+    message_lower = message.lower()
+    
+    if status == 'crisis':
+        responses = [
+            f"Ê bạn ơi, mình lo cho bạn lắm khi nghe bạn nói '{message[:30]}...'. Đừng tự mình đối mặt với chuyện này, hãy để mình giúp bạn. Bạn có thể kể cho mình nghe không?",
+            f"Dừng lại đã. Mình nghiêm túc đây, mình rất lo lắng cho bạn. '{message[:30]}...' - nghe bạn nói thế mình sợ lắm. Chuyện gì xảy ra vậy? Hãy kể cho mình biết.",
+        ]
+    elif status == 'depression':
+        responses = [
+            f"Ê bạn, '{message[:30]}...' - nghe bạn nói thế mình buồn lắm. Bạn cảm thấy thế này được bao lâu rồi? Kể cho mình nghe đi.",
+            f"Mình lo cho bạn lắm khi nghe bạn nói '{message[:30]}...'. Cảm giác này không phải lỗi của bạn đâu. Mình ở đây, chúng ta cùng nói chuyện nhé?"
+        ]
+    elif status == 'anxiety':
+        responses = [
+            f"Thấy bạn '{message[:30]}...' như vậy mình lo quá. Chuyện gì làm bạn cảm thấy thế? Kể mình nghe nào.",
+            f"Ê, mình thấy bạn không ổn lắm. '{message[:30]}...' - bạn có muốn chia sẻ với mình không?"
+        ]
+    elif status == 'stress':
+        responses = [
+            f"Ủa '{message[:30]}...'? Nghe có vẻ bạn đang gặp áp lực nè. Chuyện gì thế, kể mình nghe nào?",
+            f"Thấy bạn stress rồi đấy. '{message[:30]}...' - học nhiều quá hay có chuyện gì khác?"
+        ]
+    else:  # normal
+        responses = [
+            f"Ơ '{message[:30]}...'? Có chuyện gì thế bạn? Kể mình nghe nào!",
+            f"Ê nói gì đó nghe phát. Mình đang online đây này."
+        ]
+    
+    return {
+        "status": status,
+        "reason": "Emergency fallback - AI không khả dụng",
+        "keywords": [],
+        "response": random.choice(responses)
+    }
 ############################# fix câu trả lời của chatbot xóa mày tao
 @app.route('/')
 def index():
