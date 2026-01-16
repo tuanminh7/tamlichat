@@ -7,7 +7,6 @@ let currentPetName = 'Pet';
 let animationId;
 let clock = new THREE.Clock();
 let particles = [];
-let weatherContainer;
 
 const moodNames = {
     'happy': 'Vui Vẻ',
@@ -42,7 +41,6 @@ const MODEL_PATHS = {
 function initThreeJS() {
     const canvas = document.getElementById('petCanvas');
     const container = canvas.parentElement;
-    weatherContainer = document.getElementById('weatherEffects');
 
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0xf5f7fa);
@@ -237,35 +235,33 @@ function updatePetAnimation(time) {
     } else if (currentMood === 'worried') {
         petModel.position.x = Math.sin(time * 4) * 0.2;
         petModel.position.y = Math.sin(time * 3) * 0.15;
-        petModel.position.z = Math.cos(time * 4) * 0.2;
-        petModel.rotation.y = Math.sin(time * 2) * 0.3;
-        petModel.rotation.z = Math.sin(time * 3) * 0.1;
+        petModel.position.z = 0;
+        petModel.rotation.y = Math.PI;
 
     } else if (currentMood === 'tired') {
-        petModel.position.y = Math.sin(time * 0.8) * 0.08 - 0.4;
-        petModel.rotation.x = 0.3;
-        petModel.rotation.z = Math.sin(time * 0.5) * 0.05;
+        petModel.position.y = Math.sin(time * 2) * 0.1;
+        petModel.rotation.z = Math.sin(time) * 0.05;
+        petModel.position.x = 0;
+        petModel.position.z = 0;
 
     } else if (currentMood === 'sad') {
-        petModel.position.y = -0.6;
-        petModel.rotation.x = 0.5;
-        petModel.rotation.z = Math.sin(time * 0.3) * 0.03;
-        petModel.position.x = Math.sin(time * 0.5) * 0.05;
+        petModel.position.y = Math.sin(time) * 0.05;
+        petModel.rotation.x = -0.2;
+        petModel.position.x = 0;
+        petModel.position.z = 0;
 
     } else if (currentMood === 'critical') {
-        petModel.position.x = Math.sin(time * 8) * 0.4;
-        petModel.position.y = Math.sin(time * 6) * 0.3 - 0.5;
-        petModel.position.z = Math.cos(time * 7) * 0.3;
-        petModel.rotation.x = Math.sin(time * 5) * 0.3 + 0.4;
-        petModel.rotation.z = Math.sin(time * 9) * 0.4;
-        
-        camera.position.x += Math.sin(time * 10) * 0.02;
-        camera.position.y += Math.cos(time * 10) * 0.02;
+        petModel.position.y = 0;
+        petModel.rotation.x = Math.sin(time * 3) * 0.1 - 0.3;
+        petModel.position.x = 0;
+        petModel.position.z = 0;
     }
 }
 
 function updateParticles(time) {
-    particles.forEach(particle => {
+    particles.forEach((particle) => {
+        particle.rotation.y = time * 0.5;
+        
         const positions = particle.geometry.attributes.position.array;
         for (let i = 0; i < positions.length; i += 3) {
             positions[i + 1] += Math.sin(time + i) * 0.01;
@@ -275,175 +271,50 @@ function updateParticles(time) {
 }
 
 function getScaleByHealth(health) {
-    if (health >= 90) return 2.0;
-    if (health >= 70) return 1.7;
-    if (health >= 50) return 1.4;
-    if (health >= 30) return 1.1;
-    if (health >= 15) return 0.8;
-    return 0.6;
+    if (health >= 80) return 1.5;
+    if (health >= 60) return 1.3;
+    if (health >= 40) return 1.1;
+    if (health >= 20) return 0.9;
+    return 0.7;
 }
 
 function updatePetMood(mood, health) {
     currentMood = mood;
     currentHealth = health;
-
-    if (!petModel) return;
-
-    const moodColors = {
-        'happy': 0xffd89b,
-        'good': 0xa8edea,
-        'worried': 0xfdcbf1,
-        'tired': 0xd299c2,
-        'sad': 0x9890e3,
-        'critical': 0x757f9a
-    };
-
-    const color = moodColors[mood] || 0xffffff;
-
-    petModel.traverse(function(child) {
-        if (child.isMesh) {
-            if (child.material) {
-                child.material.emissive = new THREE.Color(color);
-                child.material.emissiveIntensity = 0.3;
-            }
-        }
-    });
-
-    scene.background = new THREE.Color(color).lerp(new THREE.Color(0xffffff), 0.8);
-
-    updateWeatherEffects(mood);
-}
-
-function updateWeatherEffects(mood) {
-    weatherContainer.innerHTML = '';
-
+    
+    // Xóa tất cả hiệu ứng thời tiết
+    clearWeatherEffects();
+    
+    // Chỉ thêm hiệu ứng cho các tâm trạng đặc biệt (không bao gồm trời nắng và mưa)
     if (mood === 'happy') {
-        createSunEffect();
-        createHeartEffect();
-        createGlitterEffect();
-    } else if (mood === 'good') {
-        createStarEffect();
-        createSnowEffect();
-    } else if (mood === 'worried') {
-        createCloudEffect();
-    } else if (mood === 'tired') {
-        createCloudEffect();
-        createRainEffect();
-    } else if (mood === 'sad') {
-        createRainEffect();
-        createCloudEffect();
+        addStarEffect();
     } else if (mood === 'critical') {
-        createRainEffect();
-        createStormEffect();
+        // Không thêm hiệu ứng mưa nữa
     }
 }
 
-function createSunEffect() {
-    const sun = document.createElement('div');
-    sun.style.position = 'absolute';
-    sun.style.top = '30px';
-    sun.style.right = '30px';
-    sun.style.width = '80px';
-    sun.style.height = '80px';
-    sun.style.borderRadius = '50%';
-    sun.style.background = 'radial-gradient(circle, #ffd700, #ffa500)';
-    sun.style.boxShadow = '0 0 40px #ffd700';
-    weatherContainer.appendChild(sun);
-
-    for (let i = 0; i < 12; i++) {
-        const ray = document.createElement('div');
-        ray.className = 'sun-ray';
-        ray.style.left = '50%';
-        ray.style.top = '30px';
-        ray.style.transform = `rotate(${i * 30}deg)`;
-        ray.style.animationDelay = `${i * 0.1}s`;
-        weatherContainer.appendChild(ray);
+function clearWeatherEffects() {
+    const weatherContainer = document.getElementById('weatherEffects');
+    if (weatherContainer) {
+        weatherContainer.innerHTML = '';
     }
 }
 
-function createHeartEffect() {
+function addStarEffect() {
+    const weatherContainer = document.getElementById('weatherEffects');
+    if (!weatherContainer) return;
+    
     setInterval(() => {
-        const heart = document.createElement('div');
-        heart.className = 'heart';
-        heart.style.left = Math.random() * 100 + '%';
-        heart.style.bottom = '0';
-        weatherContainer.appendChild(heart);
-
-        setTimeout(() => heart.remove(), 2000);
-    }, 800);
-}
-
-function createGlitterEffect() {
-    setInterval(() => {
-        const glitter = document.createElement('div');
-        glitter.className = 'glitter';
-        glitter.style.left = Math.random() * 100 + '%';
-        glitter.style.top = Math.random() * 100 + '%';
-        weatherContainer.appendChild(glitter);
-
-        setTimeout(() => glitter.remove(), 1000);
+        if (currentMood !== 'happy') return;
+        
+        const star = document.createElement('div');
+        star.className = 'particle star';
+        star.style.left = Math.random() * 100 + '%';
+        star.style.top = Math.random() * 100 + '%';
+        weatherContainer.appendChild(star);
+        
+        setTimeout(() => star.remove(), 1500);
     }, 300);
-}
-
-function createStarEffect() {
-    for (let i = 0; i < 20; i++) {
-        setTimeout(() => {
-            const star = document.createElement('div');
-            star.className = 'star';
-            star.style.left = Math.random() * 100 + '%';
-            star.style.top = Math.random() * 100 + '%';
-            star.style.animationDelay = Math.random() * 2 + 's';
-            weatherContainer.appendChild(star);
-        }, i * 100);
-    }
-}
-
-function createSnowEffect() {
-    setInterval(() => {
-        const snow = document.createElement('div');
-        snow.className = 'snowflake';
-        snow.style.left = Math.random() * 100 + '%';
-        snow.style.top = '-10px';
-        snow.style.animationDuration = (Math.random() * 2 + 2) + 's';
-        snow.style.animationDelay = Math.random() * 2 + 's';
-        weatherContainer.appendChild(snow);
-
-        setTimeout(() => snow.remove(), 5000);
-    }, 300);
-}
-
-function createCloudEffect() {
-    for (let i = 0; i < 3; i++) {
-        const cloud = document.createElement('div');
-        cloud.className = 'cloud';
-        cloud.style.top = (Math.random() * 30 + 10) + '%';
-        cloud.style.left = '-100px';
-        cloud.style.animationDuration = (Math.random() * 5 + 8) + 's';
-        cloud.style.animationDelay = i + 's';
-        weatherContainer.appendChild(cloud);
-    }
-}
-
-function createRainEffect() {
-    setInterval(() => {
-        const rain = document.createElement('div');
-        rain.className = 'rain';
-        rain.style.left = Math.random() * 100 + '%';
-        rain.style.top = '-20px';
-        rain.style.animationDuration = (Math.random() * 0.5 + 0.8) + 's';
-        weatherContainer.appendChild(rain);
-
-        setTimeout(() => rain.remove(), 2000);
-    }, 100);
-}
-
-function createStormEffect() {
-    setInterval(() => {
-        weatherContainer.style.background = 'rgba(255, 0, 0, 0.1)';
-        setTimeout(() => {
-            weatherContainer.style.background = 'transparent';
-        }, 100);
-    }, 500);
 }
 
 async function loadPetStatus() {

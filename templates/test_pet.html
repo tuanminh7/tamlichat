@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Pet 3D Model</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .controls button {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+
+        .controls button:hover {
+            transform: translateY(-2px);
+        }
+
+        .controls button:active {
+            transform: translateY(0);
+        }
+
+        #canvasContainer {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        #petCanvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .status h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            color: #666;
+        }
+
+        .status-value {
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        #consoleLog {
+            margin-top: 20px;
+            padding: 15px;
+            background: #1e1e1e;
+            color: #0f0;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .log-error { color: #f00; }
+        .log-success { color: #0f0; }
+        .log-info { color: #0ff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🐉 Test Pet 3D Model Viewer</h1>
+        
+        <div class="controls">
+            <button onclick="loadModel('dragon', 1)">Dragon Level 1</button>
+            <button onclick="loadModel('dragon', 2)">Dragon Level 2</button>
+            <button onclick="loadModel('pikachu', 1)">Pikachu Level 1</button>
+            <button onclick="loadModel('capybara', 1)">Capybara Level 1</button>
+            <button onclick="testFetch()">Test Fetch</button>
+        </div>
+
+        <div id="canvasContainer">
+            <canvas id="petCanvas"></canvas>
+        </div>
+
+        <div class="status">
+            <h3>Status:</h3>
+            <div class="status-item">
+                <span>Current Model:</span>
+                <span class="status-value" id="currentModel">None</span>
+            </div>
+            <div class="status-item">
+                <span>Loading Status:</span>
+                <span class="status-value" id="loadingStatus">Ready</span>
+            </div>
+            <div class="status-item">
+                <span>GLTFLoader:</span>
+                <span class="status-value" id="loaderStatus">Checking...</span>
+            </div>
+        </div>
+
+        <div id="consoleLog"></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    
+    <script>
+        let scene, camera, renderer, petModel, mixer, clock;
+        let animationId;
+
+        const MODEL_PATHS = {
+            dragon: {
+                1: '/static/model/source/dragon_level1.glb',
+                2: '/static/model/source/dragon_level2.glb',
+                3: '/static/model/source/dragon_level3.glb',
+                4: '/static/model/source/dragon_level4.glb'
+            },
+            pikachu: {
+                1: '/static/model/source/pikachu_level1.glb',
+                2: '/static/model/source/pikachu_level2.glb',
+                3: '/static/model/source/pikachu_level3.glb',
+                4: '/static/model/source/pikachu_level4.glb'
+            },
+            capybara: {
+                1: '/static/model/source/capybara_level1.glb',
+                2: '/static/model/source/capybara_level2.glb',
+                3: '/static/model/source/capybara_level3.glb',
+                4: '/static/model/source/capybara_level4.glb'
+            }
+        };
+
+        function log(message, type = 'info') {
+            const logDiv = document.getElementById('consoleLog');
+            const timestamp = new Date().toLocaleTimeString();
+            const logClass = type === 'error' ? 'log-error' : type === 'success' ? 'log-success' : 'log-info';
+            logDiv.innerHTML += `<div class="${logClass}">[${timestamp}] ${message}</div>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+            console.log(message);
+        }
+
+        function initThreeJS() {
+            const canvas = document.getElementById('petCanvas');
+            const container = document.getElementById('canvasContainer');
+
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xf5f7fa);
+
+            camera = new THREE.PerspectiveCamera(
+                45,
+                container.clientWidth / container.clientHeight,
+                0.1,
+                1000
+            );
+            camera.position.set(0, 2, 5);
+
+            renderer = new THREE.WebGLRenderer({ 
+                canvas: canvas, 
+                antialias: true 
+            });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            renderer.shadowMap.enabled = true;
+
+            const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
+            scene.add(ambientLight);
+
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
+            directionalLight.position.set(5, 10, 5);
+            directionalLight.castShadow = true;
+            scene.add(directionalLight);
+
+            clock = new THREE.Clock();
+
+            // Check GLTFLoader
+            if (typeof THREE.GLTFLoader !== 'undefined') {
+                document.getElementById('loaderStatus').textContent = 'Available ✅';
+                document.getElementById('loaderStatus').style.color = '#0f0';
+                log('GLTFLoader is available!', 'success');
+            } else {
+                document.getElementById('loaderStatus').textContent = 'Missing ❌';
+                document.getElementById('loaderStatus').style.color = '#f00';
+                log('GLTFLoader is NOT available!', 'error');
+            }
+
+            animate();
+            log('Three.js initialized successfully', 'success');
+
+            window.addEventListener('resize', onWindowResize, false);
+        }
+
+        function loadModel(petType, level) {
+            const modelPath = MODEL_PATHS[petType][level];
+            document.getElementById('currentModel').textContent = `${petType} Level ${level}`;
+            document.getElementById('loadingStatus').textContent = 'Loading...';
+            
+            log(`🔍 Attempting to load: ${modelPath}`, 'info');
+
+            if (typeof THREE.GLTFLoader === 'undefined') {
+                log('❌ GLTFLoader is not defined!', 'error');
+                document.getElementById('loadingStatus').textContent = 'Error: No GLTFLoader';
+                return;
+            }
+
+            if (petModel) {
+                scene.remove(petModel);
+                petModel = null;
+                mixer = null;
+                log('Removed previous model', 'info');
+            }
+
+            const loader = new THREE.GLTFLoader();
+            
+            loader.load(
+                modelPath,
+                function(gltf) {
+                    log('✅ Model loaded successfully!', 'success');
+                    document.getElementById('loadingStatus').textContent = 'Loaded ✅';
+                    document.getElementById('loadingStatus').style.color = '#0f0';
+                    
+                    petModel = gltf.scene;
+                    petModel.scale.set(1.5, 1.5, 1.5);
+                    petModel.position.set(0, 0, 0);
+
+                    petModel.traverse(function(child) {
+                        if (child.isMesh) {
+                            child.castShadow = true;
+                            child.receiveShadow = true;
+                        }
+                    });
+
+                    scene.add(petModel);
+                    log(`Model added to scene. Children: ${petModel.children.length}`, 'success');
+
+                    if (gltf.animations && gltf.animations.length > 0) {
+                        mixer = new THREE.AnimationMixer(petModel);
+                        const action = mixer.clipAction(gltf.animations[0]);
+                        action.play();
+                        log(`Animation started. Total animations: ${gltf.animations.length}`, 'success');
+                    } else {
+                        log('No animations found in model', 'info');
+                    }
+                },
+                function(xhr) {
+                    const percent = (xhr.loaded / xhr.total * 100).toFixed(2);
+                    document.getElementById('loadingStatus').textContent = `Loading ${percent}%`;
+                    log(`Loading progress: ${percent}%`, 'info');
+                },
+                function(error) {
+                    log(`❌ ERROR loading model: ${error.message || error}`, 'error');
+                    document.getElementById('loadingStatus').textContent = 'Error ❌';
+                    document.getElementById('loadingStatus').style.color = '#f00';
+                }
+            );
+        }
+
+        function testFetch() {
+            const testPath = '/static/model/source/dragon_level1.glb';
+            log(`🔍 Testing fetch: ${testPath}`, 'info');
+            
+            fetch(testPath)
+                .then(response => {
+                    if (response.ok) {
+                        log(`✅ Fetch successful! Status: ${response.status}`, 'success');
+                        log(`Content-Type: ${response.headers.get('content-type')}`, 'info');
+                        log(`Content-Length: ${response.headers.get('content-length')} bytes`, 'info');
+                    } else {
+                        log(`❌ Fetch failed! Status: ${response.status}`, 'error');
+                    }
+                })
+                .catch(error => {
+                    log(`❌ Fetch error: ${error.message}`, 'error');
+                });
+        }
+
+        function onWindowResize() {
+            const container = document.getElementById('canvasContainer');
+            camera.aspect = container.clientWidth / container.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(container.clientWidth, container.clientHeight);
+        }
+
+        function animate() {
+            animationId = requestAnimationFrame(animate);
+
+            const delta = clock.getDelta();
+
+            if (mixer) {
+                mixer.update(delta);
+            }
+
+            if (petModel) {
+                petModel.rotation.y += 0.01;
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        // Initialize when page loads
+        window.addEventListener('load', function() {
+            log('Page loaded, initializing...', 'info');
+            initThreeJS();
+        });
+    </script>
+</body>
+</html>

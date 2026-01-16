@@ -8,7 +8,12 @@ from dotenv import load_dotenv
 import os
 
 load_dotenv()
-app = Flask(__name__)
+###
+
+app = Flask(__name__, 
+            static_folder='static',
+            static_url_path='/static')
+            ###
 app.secret_key = 'your-secret-key-here-change-this'
 
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
@@ -109,10 +114,12 @@ def analyze_mental_state(message, conversation_history):
     - Depression/Crisis: Nghiêm túc hơn, thể hiện sự lo lắng thật sự, nhưng vẫn như người bạn đáng tin
     
     VÍ DỤ:
-    - "Tao mệt quá": "Ủa mệt thế? Học nhiều hay mệt vì crush không rep tin nhắn đây? Kể nghe nào!"
-    - "Sắp thi rồi stress lắm": "Ờ thì ai chả stress, nhưng mà lo cũng không làm đề dễ hơn đâu nha. Cần tao giúp gì không, học chung hay động viên tinh thần gì đó?"
-    - "Buồn quá không muốn làm gì": "Ê này, buồn thế? Chuyện gì thế bạn ơi? Kể cho tao nghe đi, đừng một mình gánh nha."
-    - "Muốn chết quá": "Dừng lại đã. Tao nghiêm túc đây, tao rất lo cho bạn. Chuyện gì xảy ra vậy? Đừng giữ trong lòng, tao sẽ ở đây với bạn. Gọi cho tao ngay được không?"
+    - "Mình mệt quá": "Ủa mệt thế? Học nhiều hay mệt vì crush không rep tin nhắn đây? Kể nghe nào!"
+    - "Sắp thi rồi stress lắm": "Ờ thì ai chả stress, nhưng mà lo cũng không làm đề dễ hơn đâu nha. Cần mình giúp gì không, học chung hay động viên tinh thần gì đó?"
+    - "Buồn quá không muốn làm gì": "Ê này, buồn thế? Chuyện gì thế bạn ơi? Kể cho mình nghe đi, đừng một mình gánh nha."
+    - "Muốn chết quá": "Dừng lại đã. Mình nghiêm túc đây, mình rất lo cho bạn. Chuyện gì xảy ra vậy? Đừng giữ trong lòng, mình sẽ ở đây với bạn. Gọi cho mình ngay được không?"
+    
+    QUAN TRỌNG: Không dùng "mày", "tao" trong câu trả lời.
     
     Trả về JSON:
     {{
@@ -128,56 +135,78 @@ def analyze_mental_state(message, conversation_history):
         result = json.loads(response.text.replace('```json', '').replace('```', '').strip())
         return result
     except Exception as e:
-        crisis_keywords = ['tự sát', 'tự tử', 'muốn chết', 'kết thúc cuộc đời', 'tự hại', 'tự làm đau mình', 'cắt tay', 'nhảy lầu', 'không muốn sống nữa', 'thà chết']
-        depression_keywords = ['trầm cảm', 'tuyệt vọng', 'vô nghĩa', 'muốn biến mất', 'không muốn làm gì', 'ghét bản thân', 'tự ghét', 'muốn ngủ mãi', 'cuộc sống vô ích']
-        anxiety_keywords = ['buồn chán', 'cô đơn', 'không vui', 'chán nản', 'mất hứng thú', 'suy nghĩ tiêu cực', 'tự ti', 'vô dụng', 'thất bại', 'không ai hiểu', 'trống rỗng', 'mất ngủ', 'ác mộng']
-        stress_keywords = ['mệt mỏi', 'áp lực', 'kiểm tra', 'thi cử', 'bài tập nhiều', 'deadline', 'lo lắng học', 'sợ điểm kém', 'căng thẳng', 'stress']
+        crisis_keywords = [
+            'tự sát', 'tự tử', 'muốn chết', 'kết thúc cuộc đời', 'tự hại', 
+            'tự làm đau mình', 'cắt tay', 'nhảy lầu', 'không muốn sống nữa', 
+            'thà chết', 'chết đi cho rồi', 'tự kết liễu', 'tự vẫn', 
+            'uống thuốc độc', 'tự sát tập thể', 'nhảy xuống', 'treo cổ'
+        ]
+        
+        depression_keywords = [
+            'trầm cảm', 'tuyệt vọng', 'vô nghĩa', 'muốn biến mất', 
+            'không muốn làm gì cả', 'ghét bản thân', 'tự ghét', 
+            'muốn ngủ mãi', 'cuộc sống vô ích', 'sống để làm gì',
+            'không còn hy vọng', 'bất lực hoàn toàn', 'cuộc đời tệ hại'
+        ]
+        
+        anxiety_keywords = [
+            'buồn chán kéo dài', 'cô đơn quá', 'không vui được', 
+            'chán nản mãi', 'mất hứng thú hoàn toàn', 'suy nghĩ tiêu cực liên tục', 
+            'tự ti nặng', 'vô dụng hoàn toàn', 'thất bại liên tục', 
+            'không ai hiểu mình', 'trống rỗng bên trong', 'mất ngủ nhiều ngày',
+            'ác mộng liên tục', 'sợ hãi không lý do'
+        ]
+        
+        stress_keywords = [
+            'mệt mỏi với học', 'áp lực học tập', 'kiểm tra nhiều', 
+            'thi cử căng thẳng', 'bài tập chồng chất', 'deadline dí', 
+            'lo lắng về điểm', 'sợ điểm kém', 'căng thẳng học', 
+            'stress vì học', 'áp lực từ gia đình'
+        ]
         
         message_lower = message.lower()
         
+        found_keywords = []
+        detected_status = 'normal'
+        
         for keyword in crisis_keywords:
             if keyword in message_lower:
-                return {
-                    "status": "crisis",
-                    "reason": f"Phát hiện từ khóa nguy kịch: '{keyword}'",
-                    "keywords": [keyword],
-                    "response": "Dừng lại đã bạn ơi. Tao nghiêm túc đây, tao rất lo cho bạn. Tao biết bạn đang đau khổ lắm, nhưng đừng tự mình gánh chuyện này. Tao muốn giúp bạn, và có nhiều người muốn giúp bạn. Bạn có thể gọi cho tao hoặc gặp mặt ngay bây giờ không? Tao sẽ ở bên bạn."
-                }
+                found_keywords.append(keyword)
+                detected_status = 'crisis'
         
-        for keyword in depression_keywords:
-            if keyword in message_lower:
-                return {
-                    "status": "depression",
-                    "reason": f"Phát hiện dấu hiệu trầm cảm nặng: '{keyword}'",
-                    "keywords": [keyword],
-                    "response": f"Ê bạn, nghe bạn nói thế tao lo lắm. Cảm giác {keyword} này không phải là lỗi của bạn đâu, nhưng bạn cần được giúp đỡ. Tao ở đây, và mình sẽ cùng tìm cách vượt qua chuyện này. Kể cho tao nghe chuyện gì đang xảy ra với bạn đi?"
-                }
+        if detected_status == 'normal':
+            for keyword in depression_keywords:
+                if keyword in message_lower:
+                    found_keywords.append(keyword)
+                    detected_status = 'depression'
         
-        for keyword in anxiety_keywords:
-            if keyword in message_lower:
-                return {
-                    "status": "anxiety",
-                    "reason": f"Phát hiện dấu hiệu lo âu: '{keyword}'",
-                    "keywords": [keyword],
-                    "response": f"Thấy bạn {keyword} tao buồn lắm. Bạn biết không, cảm giác này rất nhiều người trải qua, và nó có thể được giải quyết. Bạn muốn kể cho tao nghe chuyện gì đang làm bạn cảm thấy như vậy không? Tao sẽ lắng nghe hết đấy."
-                }
+        if detected_status == 'normal':
+            for keyword in anxiety_keywords:
+                if keyword in message_lower:
+                    found_keywords.append(keyword)
+                    detected_status = 'anxiety'
         
-        for keyword in stress_keywords:
-            if keyword in message_lower:
-                return {
-                    "status": "stress",
-                    "reason": f"Phát hiện dấu hiệu căng thẳng: '{keyword}'",
-                    "keywords": [keyword],
-                    "response": f"Ủa {keyword} hả? Ờ thì ai học hành mà chả thế. Nhưng mà lo nhiều quá cũng không tốt đâu nha. Kể cho tao nghe cụ thể đi, tao xem giúp được gì cho bạn không. Đừng tự dồn nén trong lòng!"
-                }
+        if detected_status == 'normal':
+            for keyword in stress_keywords:
+                if keyword in message_lower:
+                    found_keywords.append(keyword)
+                    detected_status = 'stress'
+        
+        responses = {
+            'crisis': "Dừng lại đã bạn ơi. Mình nghiêm túc đây, mình rất lo cho bạn. Mình biết bạn đang đau khổ lắm, nhưng đừng tự mình gánh chuyện này. Mình muốn giúp bạn, và có nhiều người muốn giúp bạn. Bạn có thể gọi cho mình hoặc gặp mặt ngay bây giờ không? Mình sẽ ở bên bạn.",
+            'depression': f"Ê bạn, nghe bạn nói thế mình lo lắm. Cảm giác này không phải là lỗi của bạn đâu, nhưng bạn cần được giúp đỡ. Mình ở đây, và chúng ta sẽ cùng tìm cách vượt qua chuyện này. Kể cho mình nghe chuyện gì đang xảy ra với bạn đi?",
+            'anxiety': f"Thấy bạn như vậy mình buồn lắm. Bạn biết không, cảm giác này rất nhiều người trải qua, và nó có thể được giải quyết. Bạn muốn kể cho mình nghe chuyện gì đang làm bạn cảm thấy như vậy không? Mình sẽ lắng nghe hết đấy.",
+            'stress': f"Ủa căng thẳng hả? Ờ thì ai học hành mà chả thế. Nhưng mà lo nhiều quá cũng không tốt đâu nha. Kể cho mình nghe cụ thể đi, mình xem giúp được gì cho bạn không. Đừng tự dồn nén trong lòng!",
+            'normal': "Ơ kìa, nói gì đó đi! Mình nghe đây này. Có chuyện gì vui hay buồn cứ chia sẻ thoải mái nha!"
+        }
         
         return {
-            "status": "normal",
-            "reason": f"Lỗi phân tích AI ({str(e)}), không phát hiện từ khóa tiêu cực",
-            "keywords": [],
-            "response": "Ơ kìa, nói gì đó đi! Tao nghe đây này. Có chuyện gì vui hay buồn cứ chia sẻ thoải mái nha!"
+            "status": detected_status,
+            "reason": f"Phát hiện từ khóa: {', '.join(found_keywords)}" if found_keywords else f"Lỗi phân tích AI ({str(e)}), không phát hiện từ khóa tiêu cực",
+            "keywords": found_keywords,
+            "response": responses[detected_status]
         }
-
+############################# fix câu trả lời của chatbot xóa mày tao
 @app.route('/')
 def index():
     if 'user_id' in session:
@@ -352,7 +381,7 @@ def teacher_dashboard():
         if not conversations:
             continue
         
-        recent_conversations = conversations[-6:]
+        recent_conversations = conversations[-10:]
         
         status_count = {
             'stress': 0,
@@ -383,19 +412,19 @@ def teacher_dashboard():
         if status_count['crisis'] >= 1:
             final_status = 'crisis'
             should_alert = True
-            alert_reason = f"Phát hiện {status_count['crisis']} lần nguy kịch trong 6 tin nhắn gần nhất"
-        elif status_count['depression'] >= 2:
+            alert_reason = f"Phát hiện {status_count['crisis']} tin nhắn nguy kịch trong 10 tin nhắn gần nhất. Cần can thiệp ngay!"
+        elif status_count['depression'] >= 3:
             final_status = 'depression'
             should_alert = True
-            alert_reason = f"Phát hiện {status_count['depression']} lần trầm cảm nặng trong 6 tin nhắn gần nhất"
-        elif status_count['anxiety'] >= 3:
+            alert_reason = f"Phát hiện {status_count['depression']} tin nhắn trầm cảm nặng trong 10 tin nhắn gần nhất"
+        elif status_count['anxiety'] >= 5:
             final_status = 'anxiety'
             should_alert = True
-            alert_reason = f"Phát hiện {status_count['anxiety']} lần lo âu trong 6 tin nhắn gần nhất"
-        elif status_count['stress'] >= 3:
+            alert_reason = f"Phát hiện {status_count['anxiety']} tin nhắn lo âu trong 10 tin nhắn gần nhất"
+        elif status_count['stress'] >= 6:
             final_status = 'stress'
             should_alert = True
-            alert_reason = f"Phát hiện {status_count['stress']} lần căng thẳng trong 6 tin nhắn gần nhất"
+            alert_reason = f"Phát hiện {status_count['stress']} tin nhắn căng thẳng trong 10 tin nhắn gần nhất"
         
         stats[final_status] += 1
         
@@ -403,7 +432,7 @@ def teacher_dashboard():
             'id': student_id,
             'info': users['students'].get(student_id),
             'status_count': status_count,
-            'keywords': {k: list(set(v)) for k, v in keywords_found.items()},
+            'keywords': {k: list(set(v)) for k, v in keywords_found.items() if v},
             'last_message_time': conversations[-1]['timestamp'] if conversations else None,
             'total_messages': len(conversations),
             'alert_reason': alert_reason if should_alert else None
@@ -415,9 +444,9 @@ def teacher_dashboard():
             alert_students.append(student_data)
     
     alert_students.sort(key=lambda x: (
-        4 if 'crisis' in x['id'] else
-        3 if x.get('status_count', {}).get('depression', 0) >= 2 else
-        2 if x.get('status_count', {}).get('anxiety', 0) >= 3 else 1
+        5 if x.get('status_count', {}).get('crisis', 0) >= 1 else
+        4 if x.get('status_count', {}).get('depression', 0) >= 3 else
+        3 if x.get('status_count', {}).get('anxiety', 0) >= 5 else 2
     ), reverse=True)
     
     return render_template('teacher_dashboard.html', 
@@ -425,6 +454,7 @@ def teacher_dashboard():
                          stats=stats,
                          students=students_by_status,
                          alert_students=alert_students)
+                         ####### sửa
 
 @app.route('/teacher/intervene/<student_id>')
 @login_required
@@ -867,6 +897,31 @@ def get_chat_history():
         'history': conversation_history
     })
     #########333
+#ktra model
+@app.route('/test-model')
+def test_model():
+    """Route để test xem file model có accessible không"""
+    import os
+    model_dir = os.path.join(app.static_folder, 'model', 'source')
+    
+    if not os.path.exists(model_dir):
+        return jsonify({'error': 'Model directory not found', 'path': model_dir})
+    
+    files = os.listdir(model_dir)
+    glb_files = [f for f in files if f.endswith('.glb')]
+    
+    return jsonify({
+        'model_directory': model_dir,
+        'exists': True,
+        'glb_files': glb_files,
+        'total_files': len(files),
+        'test_url': '/static/model/source/dragon_level1.glb'
+    })
+## check templates
+@app.route('/test-pet-viewer')
+def test_pet_viewer():
+    return render_template('test_pet.html')
+
 if __name__ == '__main__':
     init_data()
     app.run(debug=True)
