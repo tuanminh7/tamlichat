@@ -114,6 +114,77 @@
           "thất tình",
           "trống rỗng"
         ]
+      },
+      {
+        "timestamp": "2026-01-17T00:02:59.125838",
+        "student_message": "hi",
+        "bot_response": "Ê bạn ơi, lại 'hi' nữa hả? Vừa mới kể mình vụ 'thất tình' xong giờ 'hi' là mình tưởng bạn muốn 'thoát vai' rồi chứ. Nhưng mà mình biết cảm giác 'trống rỗng' và 'thất tình' đó không dễ chịu chút nào đâu. Bạn có muốn mình nghe tiếp không?",
+        "status": "depression",
+        "reason": "Học sinh vừa chia sẻ về việc 'thất tình' và cảm thấy 'trống rỗng'. Việc nói 'hi' đột ngột có thể là một dấu hiệu của sự chần chừ, không biết bắt đầu câu chuyện từ đâu, hoặc muốn tạm dừng chủ đề nặng nề. Tuy nhiên, nỗi buồn về thất tình vẫn đang hiện hữu, nên tâm lý vẫn là 'depression'.",
+        "keywords": [
+          "hi",
+          "thất tình",
+          "trống rỗng"
+        ]
+      },
+      {
+        "timestamp": "2026-01-17T00:30:44.862032",
+        "student_message": "hi",
+        "bot_response": "Ê bạn ơi, lại 'hi' nữa hả? Bộ 'hi' là ngôn ngữ của người đang 'thất tình' hay gì mà thấy bạn dùng hoài vậy? Mà mình biết là cái vụ 'trống rỗng' với 'thất tình' nó vẫn còn ở đó thôi, đâu có dễ 'hi' cái là biến mất đâu ha. Bạn muốn mình nghe tiếp không, hay chỉ muốn mình biết là bạn vẫn đang ở đây thôi?",
+        "status": "depression",
+        "reason": "Học sinh tiếp tục gửi 'hi' sau khi bot đã nhắc lại về cảm giác 'thất tình' và 'trống rỗng' ở tin nhắn trước, cho thấy tâm trạng tiêu cực vẫn còn đó hoặc học sinh đang khó mở lời.",
+        "keywords": [
+          "hi",
+          "thất tình",
+          "trống rỗng"
+        ]
+      },
+      {
+        "timestamp": "2026-01-17T00:30:57.691307",
+        "student_message": "à mà sao lạ vậy ta",
+        "bot_response": "Ê nói gì đó nghe phát. Mình đang online đây này.",
+        "status": "normal",
+        "reason": "Emergency fallback - AI không khả dụng",
+        "keywords": []
+      },
+      {
+        "timestamp": "2026-01-17T00:33:26.543826",
+        "student_message": "sao rồi bạn",
+        "bot_response": "Ê, mình thì vẫn 'tới công chuyện' chờ bạn đây nè. Mà bạn hỏi 'sao rồi' là ý bạn đang thắc mắc cái vụ 'lạ lạ' lúc nãy bạn nói á hả? Hay là bạn muốn biết vụ 'thất tình' với 'trống rỗng' của bạn đang tiến triển tới đâu rồi? Chứ mình thấy mấy vụ đó đâu có tự nhiên 'sao' được liền đâu ha, nó vẫn còn 'đeo bám' bạn ở đó à.",
+        "status": "depression",
+        "reason": "Học sinh đang hỏi về tình hình bản thân sau khi nhắc đến cảm giác 'trống rỗng' và 'thất tình', đồng thời đề cập đến 'sự lạ' có thể là sự bối rối về cảm xúc của chính mình. Câu hỏi 'sao rồi bạn' trong ngữ cảnh này thể hiện sự chờ đợi và có thể là sự chưa ổn định về tâm lý.",
+        "keywords": [
+          "sao rồi bạn",
+          "lạ",
+          "thất tình",
+          "trống rỗng"
+        ]
+      },
+      {
+        "timestamp": "2026-01-17T00:33:49.141964",
+        "student_message": "ồ vậy tôi sẽ nói như bình thường",
+        "bot_response": "Ố là la, nghe bạn nói 'sẽ nói như bình thường' là mình thấy có 'tín hiệu' tích cực rồi đó nha! Mừng hú hồn, tưởng bạn định 'hi' mình tới sáng luôn chứ. Vậy 'bình thường' của bạn bây giờ là muốn kể rõ hơn về cái vụ 'thất tình' với 'trống rỗng' bữa giờ đúng không? Cứ nói hết đi, mình 'full mood' lắng nghe đây này.",
+        "status": "depression",
+        "reason": "Học sinh thay đổi cách giao tiếp, đồng ý nói chuyện 'bình thường' sau khi bot liên tục nhắc nhở về tình trạng 'thất tình' và 'trống rỗng'. Tuy nhiên, trạng thái tâm lý 'depression' chưa hề thay đổi, chỉ là cách họ sẵn sàng đối mặt và chia sẻ đã khác.",
+        "keywords": [
+          "nói như bình thường",
+          "thất tình",
+          "trống rỗng",
+          "kể rõ hơn"
+        ]
+      }
+    ],
+    "minh": [
+      {
+        "timestamp": "2026-01-17T21:29:10.447821",
+        "student_message": "hello bạn",
+        "bot_response": "Ối giời, ai đây mà tự dưng 'hello bạn' thế? Đang định ngủ trưa thì bạn làm mình tỉnh giấc đó nha. Có gì hot kể nghe coi!",
+        "status": "normal",
+        "reason": "Học sinh gửi lời chào đơn giản, không có dấu hiệu cảm xúc tiêu cực.",
+        "keywords": [
+          "hello",
+          "chào hỏi"
+        ]
       }
     ]
   },
@@ -192,16 +263,31 @@
       "pet_type": "dragon",
       "pet_name": "bi béo",
       "level": 1,
-      "health": 100,
+      "health": 40,
       "mood": "happy",
       "total_care_count": 8,
-      "chat_count": 10,
+      "chat_count": 15,
       "days_at_100_health": 0,
       "last_100_health_date": "2026-01-16",
       "consecutive_days_100": 1,
       "level_up_history": [],
       "created_at": "2026-01-16T23:10:25.750753",
-      "last_updated": "2026-01-16T23:57:12.253657"
+      "last_updated": "2026-01-17T00:33:49.141964"
+    },
+    "minh": {
+      "pet_type": "capybara",
+      "pet_name": "báo",
+      "level": 1,
+      "health": 100,
+      "mood": "happy",
+      "total_care_count": 0,
+      "chat_count": 1,
+      "days_at_100_health": 0,
+      "last_100_health_date": "2026-01-17",
+      "consecutive_days_100": 1,
+      "level_up_history": [],
+      "created_at": "2026-01-17T21:27:57.845642",
+      "last_updated": "2026-01-17T21:29:10.447821"
     }
   },
   "task_history": {

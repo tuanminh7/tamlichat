@@ -4,6 +4,26 @@
       "password": "toan123",
       "role": "teacher",
       "name": "Nguyễn Thị Mai"
+    },
+    "gv_tin": {
+      "password": "tin123",
+      "role": "teacher",
+      "name": "Nguyễn Van A"
+    },
+    "gv_van": {
+      "password": "van123",
+      "role": "teacher",
+      "name": "Nguyễn B"
+    },
+    "gv_anh": {
+      "password": "anh123",
+      "role": "teacher",
+      "name": "Nguyễn C"
+    },
+    "gv_vatli": {
+      "password": "vatli123",
+      "role": "teacher",
+      "name": "Nguyễn D"
     }
   },
   "students": {
@@ -34,6 +54,13 @@
       "class": "12a",
       "phone": "0293726377",
       "created_at": "2026-01-15T15:14:01.673845"
+    },
+    "minh": {
+      "password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+      "name": "kkkk",
+      "class": "9a2",
+      "phone": "0293726378",
+      "created_at": "2026-01-17T21:27:17.207469"
     }
   }
 }

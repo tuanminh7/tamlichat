@@ -92,14 +92,13 @@ def analyze_mental_state(message, conversation_history):
     CÓ NHỚ NGỮ CẢNH DÀI HẠN
     """
     
-    # ✅ TĂNG SỐ LƯỢNG TIN NHẮN LẤY TỪ LỊCH SỬ
-    # Lấy 10-15 tin nhắn gần nhất thay vì 5
+   
     recent = conversation_history[-15:] if len(conversation_history) > 15 else conversation_history
     
-    # ✅ TẠO CONTEXT CHI TIẾT HƠN
+  
     history_context = ""
     if conversation_history:
-        # Thêm thông tin về status và keywords
+     
         context_lines = []
         for idx, conv in enumerate(recent, 1):
             status = conv.get('status', 'normal')
@@ -107,7 +106,7 @@ def analyze_mental_state(message, conversation_history):
             student_msg = conv.get('student_message', '')
             bot_response = conv.get('bot_response', '')
             
-            # Format chi tiết hơn
+           
             context_lines.append(
                 f"[{idx}] Học sinh: {student_msg}\n"
                 f"    Bot: {bot_response}\n"
@@ -117,10 +116,10 @@ def analyze_mental_state(message, conversation_history):
         
         history_context = "\n".join(context_lines)
     
-    # ✅ THÊM SUMMARY TỔNG QUAN
+  
     summary = ""
     if len(conversation_history) >= 5:
-        # Đếm trạng thái trong lịch sử
+      
         status_count = {}
         for conv in conversation_history[-10:]:
             status = conv.get('status', 'normal')
@@ -131,7 +130,7 @@ def analyze_mental_state(message, conversation_history):
             for status, count in status_count.items():
                 summary += f"- {status}: {count} lần\n"
     
-    # ✅ PROMPT CẢI TIẾN
+   
     prompt = f"""
 Bạn là một người bạn thân thiết của học sinh - vừa hài hước, vừa ấm áp, vừa hiểu họ. 
 Bạn nói chuyện tự nhiên như Gen Z, thỉnh thoảng châm biếm nhẹ nhàng để tạo không khí thoải mái.
@@ -200,15 +199,15 @@ CHÚ Ý LIÊN KẾT:
             response = model.generate_content(prompt)
             response_text = response.text.strip()
             
-            # Clean JSON markers
+            
             response_text = response_text.replace('```json', '').replace('```', '').strip()
             
-            # Parse JSON
+           
             result = json.loads(response_text)
             
-            # VALIDATE OUTPUT
+           
             if not validate_ai_response(result, message):
-                print(f"⚠️ AI response không hợp lệ (attempt {attempt + 1}): {result}")
+                print(f" AI response không hợp lệ (attempt {attempt + 1}): {result}")
                 if attempt < max_retries - 1:
                     time.sleep(1)
                     continue
@@ -218,7 +217,7 @@ CHÚ Ý LIÊN KẾT:
             return result
             
         except json.JSONDecodeError as e:
-            print(f"❌ JSON parse error (attempt {attempt + 1}): {str(e)}")
+            print(f" JSON parse error (attempt {attempt + 1}): {str(e)}")
             print(f"Response text: {response_text[:200]}")
             
             if attempt < max_retries - 1:
@@ -228,7 +227,7 @@ CHÚ Ý LIÊN KẾT:
                 return fallback_simple_ai_response(message, conversation_history)
                 
         except Exception as e:
-            print(f"❌ AI error (attempt {attempt + 1}): {str(e)}")
+            print(f" AI error (attempt {attempt + 1}): {str(e)}")
             
             if attempt < max_retries - 1:
                 time.sleep(1)
@@ -244,41 +243,40 @@ def validate_ai_response(result, original_message):
     required_keys = ['status', 'reason', 'keywords', 'response']
     valid_statuses = ['normal', 'stress', 'anxiety', 'depression', 'crisis']
     
-    # 1. Check required keys
+    
     if not all(key in result for key in required_keys):
-        print(f"⚠️ Missing keys: {set(required_keys) - set(result.keys())}")
+        print(f" Missing keys: {set(required_keys) - set(result.keys())}")
         return False
     
-    # 2. Check status validity
+ 
     if result['status'] not in valid_statuses:
-        print(f"⚠️ Invalid status: {result['status']}")
+        print(f" Invalid status: {result['status']}")
         return False
     
-    # 3. Check response length
     response_length = len(result['response'])
     if response_length < 10:
-        print(f"⚠️ Response too short: {response_length} chars")
+        print(f" Response too short: {response_length} chars")
         return False
     
     if response_length > 1000:
-        print(f"⚠️ Response too long: {response_length} chars")
+        print(f" Response too long: {response_length} chars")
         result['response'] = result['response'][:1000] + "..."
     
     # 4. Check keywords is list
     if not isinstance(result['keywords'], list):
-        print(f"⚠️ Keywords is not list: {type(result['keywords'])}")
+        print(f" Keywords is not list: {type(result['keywords'])}")
         return False
     
     # 5. Check response không chứa "mày" hoặc "tao"
     response_lower = result['response'].lower()
     if 'mày' in response_lower or 'tao' in response_lower:
-        print(f"⚠️ Response contains inappropriate words")
+        print(f" Response contains inappropriate words")
         return False
     
     # 6. Check response không phải placeholder
     placeholders = ['[placeholder]', '[...]', 'xxx', 'yyy']
     if any(p in response_lower for p in placeholders):
-        print(f"⚠️ Response contains placeholders")
+        print(f" Response contains placeholders")
         return False
     
     return True
@@ -290,17 +288,17 @@ def fallback_simple_ai_response(message, conversation_history):
     dùng prompt đơn giản hơn NHƯNG VẪN là AI
     """
     
-    # Detect keywords để classify (backup)
+   
     detected_status, found_keywords = detect_keywords_backup(message)
     
-    # Tạo context ngắn gọn
+    
     recent_context = ""
     if conversation_history:
         last_conv = conversation_history[-1] if conversation_history else None
         if last_conv:
             recent_context = f"\nTin nhắn trước: {last_conv.get('student_message', '')}"
     
-    # Prompt đơn giản, KHÔNG yêu cầu JSON
+   
     simple_prompt = f"""
 Bạn là bạn thân của học sinh.{recent_context}
 
@@ -309,7 +307,7 @@ Học sinh vừa nói: "{message}"
 Tâm trạng học sinh: {get_mood_description(detected_status)}
 
 Hãy trả lời ngắn gọn (2-3 câu) như người bạn thật sự.
-{"⚠️ HỌC SINH CÓ DẤU HIỆU NGUY HIỂM - hãy thể hiện lo lắng nghiêm túc và khuyến khích tìm kiếm sự giúp đỡ!" if detected_status == 'crisis' else ""}
+{" HỌC SINH CÓ DẤU HIỆU NGUY HIỂM - hãy thể hiện lo lắng nghiêm túc và khuyến khích tìm kiếm sự giúp đỡ!" if detected_status == 'crisis' else ""}
 
 QUY TẮC:
 - Không dùng "mày", "tao"
@@ -336,7 +334,7 @@ QUY TẮC:
         }
         
     except Exception as e:
-        print(f"❌ Fallback AI cũng lỗi: {str(e)}")
+        print(f" Fallback AI cũng lỗi: {str(e)}")
         # CUỐI CÙNG: Emergency response - VẪN TỰ NHIÊN
         return get_emergency_response(detected_status, message)
 
@@ -625,6 +623,8 @@ def teacher_dashboard():
     
     alert_students = []
     
+    total_students = len(users.get('students', {}))
+    
     for student_id, conversations in data['conversations'].items():
         if not conversations:
             continue
@@ -701,7 +701,8 @@ def teacher_dashboard():
                          name=session.get('name'),
                          stats=stats,
                          students=students_by_status,
-                         alert_students=alert_students)
+                         alert_students=alert_students,
+                         total_students=total_students)
                          ####### sửa
 
 @app.route('/teacher/intervene/<student_id>')

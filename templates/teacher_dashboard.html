@@ -76,6 +76,40 @@
             font-size: 1rem;
         }
 
+        .total-students-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            color: white;
+        }
+
+        .total-students-icon {
+            font-size: 4rem;
+            background: rgba(255, 255, 255, 0.2);
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .total-students-content h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.95;
+        }
+
+        .total-students-content .count {
+            font-size: 3.5rem;
+            font-weight: bold;
+        }
+
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
@@ -344,90 +378,98 @@
 </head>
 <body>
     <nav class="navbar">
-        <h1>Bang dieu khien Giao vien</h1>
+        <h1> Bảng điều khiển Giáo viên</h1>
         <div class="navbar-right">
             <span>{{ name }}</span>
-            <a href="{{ url_for('logout') }}">Dang xuat</a>
+            <a href="{{ url_for('logout') }}">Đăng xuất</a>
         </div>
     </nav>
     
     <div class="container">
         <div class="page-header">
             <h2>
-                Thong ke Tam ly Hoc sinh
+                 Thống kê Tâm lý Học sinh
             </h2>
-            <p>Tong quan tinh trang tam ly cua tat ca hoc sinh</p>
+            <p>Tổng quan tình trạng tâm lý của tất cả học sinh</p>
+        </div>
+
+        <div class="total-students-card">
+            <div class="total-students-icon">👥</div>
+            <div class="total-students-content">
+                <h3>Tổng số học sinh đã đăng ký</h3>
+                <div class="count">{{ total_students }}</div>
+            </div>
         </div>
 
         <div class="stats-grid">
             <div class="stat-card stat-normal">
-                <p>Binh thuong</p>
+                <p>😊 Bình thường</p>
                 <h3>{{ stats.normal }}</h3>
             </div>
             <div class="stat-card stat-stress">
-                <p>Stress</p>
+                <p>😰 Căng thẳng</p>
                 <h3>{{ stats.stress }}</h3>
             </div>
             <div class="stat-card stat-anxiety">
-                <p>Lo au</p>
+                <p>😟 Lo âu</p>
                 <h3>{{ stats.anxiety }}</h3>
             </div>
             <div class="stat-card stat-depression">
-                <p>Tram cam</p>
+                <p>😢 Trầm cảm</p>
                 <h3>{{ stats.depression }}</h3>
             </div>
             <div class="stat-card stat-crisis">
-                <p>Nguykich</p>
+                <p>🆘 Nguy kịch</p>
                 <h3>{{ stats.crisis }}</h3>
             </div>
         </div>
 
         <div class="page-header">
             <h2>
-                Canh bao Khan cap
+                Cảnh báo Khẩn cấp
                 {% if alert_students %}
-                <span class="alert-count">{{ alert_students|length }} truong hop</span>
+                <span class="alert-count">{{ alert_students|length }} trường hợp</span>
                 {% endif %}
             </h2>
-            <p>Hoc sinh can can thiep tam ly ngay lap tuc</p>
+            <p>Học sinh cần can thiệp tâm lý ngay lập tức</p>
         </div>
         
         {% if alert_students %}
             {% for student in alert_students %}
             <div class="alert-card">
                 <div class="alert-header">
-                    <h3>Truong hop khan cap</h3>
-                    <span class="alert-badge">CAN XU LY NGAY</span>
+                    <h3> Trường hợp khẩn cấp</h3>
+                    <span class="alert-badge">CẦN XỬ LÝ NGAY</span>
                 </div>
                 
                 <div class="student-info">
                     <div class="info-item">
-                        <strong>Ma hoc sinh</strong>
+                        <strong>Mã học sinh</strong>
                         <p>{{ student.id }}</p>
                     </div>
                     <div class="info-item">
-                        <strong>Ho va ten</strong>
+                        <strong>Họ và tên</strong>
                         <p>{{ student.info.name }}</p>
                     </div>
                     <div class="info-item">
-                        <strong>Lop</strong>
+                        <strong>Lớp</strong>
                         <p>{{ student.info.class }}</p>
                     </div>
                     <div class="info-item">
-                        <strong>So dien thoai</strong>
+                        <strong>Số điện thoại</strong>
                         <p>{{ student.info.phone }}</p>
                     </div>
                 </div>
                 
                 {% if student.alert_reason %}
                 <div class="status-detail">
-                    <p><strong>Ly do canh bao:</strong> {{ student.alert_reason }}</p>
+                    <p><strong>Lý do cảnh báo:</strong> {{ student.alert_reason }}</p>
                 </div>
                 {% endif %}
 
                 {% if student.keywords %}
                 <div style="margin-bottom: 1.5rem;">
-                    <strong style="color: #c0392b; font-size: 0.9rem;">Tu khoa phat hien:</strong>
+                    <strong style="color: #c0392b; font-size: 0.9rem;">Từ khóa phát hiện:</strong>
                     <div class="keywords">
                         {% for status, kw_list in student.keywords.items() %}
                             {% for keyword in kw_list %}
@@ -439,53 +481,53 @@
                 {% endif %}
                 
                 <a href="{{ url_for('teacher_intervene', student_id=student.id) }}" class="btn-intervene">
-                    <span>Can thiep ngay lap tuc</span>
+                    <span>🆘 Can thiệp ngay lập tức</span>
                 </a>
                 
                 {% if student.last_message_time %}
                 <div class="timestamp">
-                    Tin nhan cuoi: {{ student.last_message_time }} | Tong tin nhan: {{ student.total_messages }}
+                    Tin nhắn cuối: {{ student.last_message_time }} | Tổng tin nhắn: {{ student.total_messages }}
                 </div>
                 {% endif %}
             </div>
             {% endfor %}
         {% else %}
             <div class="no-alerts">
-                <div class="icon">OK</div>
-                <h3>Tuyet voi!</h3>
-                <p>Hien tai khong co canh bao khan cap nao</p>
-                <p style="margin-top: 1rem; font-size: 0.95rem;">Tat ca hoc sinh dang o trang thai tam ly on dinh.</p>
+                <div class="icon"></div>
+                <h3>Tuyệt vời!</h3>
+                <p>Hiện tại không có cảnh báo khẩn cấp nào</p>
+                <p style="margin-top: 1rem; font-size: 0.95rem;">Tất cả học sinh đang ở trạng thái tâm lý ổn định.</p>
             </div>
         {% endif %}
 
         <div class="section-card">
-            <h3 style="color: #27ae60;">Hoc sinh Binh thuong ({{ stats.normal }})</h3>
+            <h3 style="color: #27ae60;">😊 Học sinh Bình thường ({{ stats.normal }})</h3>
             {% if students.normal %}
             <div class="student-grid">
                 {% for student in students.normal %}
                 <div class="student-item" style="border-left-color: #27ae60;">
                     <h4>{{ student.info.name }}</h4>
-                    <p>Ma: {{ student.id }}</p>
-                    <p>Lop: {{ student.info.class }}</p>
-                    <p>Tin nhan: {{ student.total_messages }}</p>
+                    <p>Mã: {{ student.id }}</p>
+                    <p>Lớp: {{ student.info.class }}</p>
+                    <p>Tin nhắn: {{ student.total_messages }}</p>
                 </div>
                 {% endfor %}
             </div>
             {% else %}
-            <p style="color: #7f8c8d;">Khong co hoc sinh nao</p>
+            <p style="color: #7f8c8d;">Không có học sinh nào</p>
             {% endif %}
         </div>
 
         <div class="section-card">
-            <h3 style="color: #3498db;">Hoc sinh Stress ({{ stats.stress }})</h3>
+            <h3 style="color: #3498db;">😰 Học sinh Căng thẳng ({{ stats.stress }})</h3>
             {% if students.stress %}
             <div class="student-grid">
                 {% for student in students.stress %}
                 <div class="student-item" style="border-left-color: #3498db;">
                     <h4>{{ student.info.name }}</h4>
-                    <p>Ma: {{ student.id }}</p>
-                    <p>Lop: {{ student.info.class }}</p>
-                    <p>Tin nhan: {{ student.total_messages }}</p>
+                    <p>Mã: {{ student.id }}</p>
+                    <p>Lớp: {{ student.info.class }}</p>
+                    <p>Tin nhắn: {{ student.total_messages }}</p>
                     {% if student.alert_reason %}
                     <p style="color: #3498db; margin-top: 0.5rem; font-weight: 600;">{{ student.alert_reason }}</p>
                     {% endif %}
@@ -493,20 +535,20 @@
                 {% endfor %}
             </div>
             {% else %}
-            <p style="color: #7f8c8d;">Khong co hoc sinh nao</p>
+            <p style="color: #7f8c8d;">Không có học sinh nào</p>
             {% endif %}
         </div>
 
         <div class="section-card">
-            <h3 style="color: #f39c12;">Hoc sinh Lo au ({{ stats.anxiety }})</h3>
+            <h3 style="color: #f39c12;">😟 Học sinh Lo âu ({{ stats.anxiety }})</h3>
             {% if students.anxiety %}
             <div class="student-grid">
                 {% for student in students.anxiety %}
                 <div class="student-item" style="border-left-color: #f39c12;">
                     <h4>{{ student.info.name }}</h4>
-                    <p>Ma: {{ student.id }}</p>
-                    <p>Lop: {{ student.info.class }}</p>
-                    <p>Tin nhan: {{ student.total_messages }}</p>
+                    <p>Mã: {{ student.id }}</p>
+                    <p>Lớp: {{ student.info.class }}</p>
+                    <p>Tin nhắn: {{ student.total_messages }}</p>
                     {% if student.alert_reason %}
                     <p style="color: #f39c12; margin-top: 0.5rem; font-weight: 600;">{{ student.alert_reason }}</p>
                     {% endif %}
@@ -514,20 +556,20 @@
                 {% endfor %}
             </div>
             {% else %}
-            <p style="color: #7f8c8d;">Khong co hoc sinh nao</p>
+            <p style="color: #7f8c8d;">Không có học sinh nào</p>
             {% endif %}
         </div>
 
         <div class="section-card">
-            <h3 style="color: #e67e22;">Hoc sinh Tram cam ({{ stats.depression }})</h3>
+            <h3 style="color: #e67e22;">😢 Học sinh Trầm cảm ({{ stats.depression }})</h3>
             {% if students.depression %}
             <div class="student-grid">
                 {% for student in students.depression %}
                 <div class="student-item" style="border-left-color: #e67e22;">
                     <h4>{{ student.info.name }}</h4>
-                    <p>Ma: {{ student.id }}</p>
-                    <p>Lop: {{ student.info.class }}</p>
-                    <p>Tin nhan: {{ student.total_messages }}</p>
+                    <p>Mã: {{ student.id }}</p>
+                    <p>Lớp: {{ student.info.class }}</p>
+                    <p>Tin nhắn: {{ student.total_messages }}</p>
                     {% if student.alert_reason %}
                     <p style="color: #e67e22; margin-top: 0.5rem; font-weight: 600;">{{ student.alert_reason }}</p>
                     {% endif %}
@@ -535,21 +577,21 @@
                 {% endfor %}
             </div>
             {% else %}
-            <p style="color: #7f8c8d;">Khong co hoc sinh nao</p>
+            <p style="color: #7f8c8d;">Không có học sinh nào</p>
             {% endif %}
         </div>
 
         <div class="section-card">
-            <h3 style="color: #e74c3c;">Hoc sinh Nguy kich ({{ stats.crisis }})</h3>
+            <h3 style="color: #e74c3c;">🆘 Học sinh Nguy kịch ({{ stats.crisis }})</h3>
             {% if students.crisis %}
             <div class="student-grid">
                 {% for student in students.crisis %}
                 <div class="student-item" style="border-left-color: #e74c3c; background: #fff5f5;">
                     <h4>{{ student.info.name }}</h4>
-                    <p>Ma: {{ student.id }}</p>
-                    <p>Lop: {{ student.info.class }}</p>
-                    <p>So dien thoai: {{ student.info.phone }}</p>
-                    <p>Tin nhan: {{ student.total_messages }}</p>
+                    <p>Mã: {{ student.id }}</p>
+                    <p>Lớp: {{ student.info.class }}</p>
+                    <p>Số điện thoại: {{ student.info.phone }}</p>
+                    <p>Tin nhắn: {{ student.total_messages }}</p>
                     {% if student.alert_reason %}
                     <p style="color: #e74c3c; margin-top: 0.5rem; font-weight: 600;">{{ student.alert_reason }}</p>
                     {% endif %}
@@ -557,7 +599,7 @@
                 {% endfor %}
             </div>
             {% else %}
-            <p style="color: #7f8c8d;">Khong co hoc sinh nao</p>
+            <p style="color: #7f8c8d;">Không có học sinh nào</p>
             {% endif %}
         </div>
     </div>
