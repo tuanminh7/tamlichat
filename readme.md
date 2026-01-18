@@ -1,4 +1,4 @@
-Mental Health Support System - Hệ thống Hỗ trợ Sức khỏe Tâm lý Học sinh
+MINDBUDDY - Hệ thống Hỗ trợ Sức khỏe Tâm lý Học sinh
 Hệ thống web application hỗ trợ theo dõi và can thiệp sớm các vấn đề sức khỏe tâm lý của học sinh thông qua chatbot AI và hệ thống pet ảo động viên.
 
 Tổng quan dự án

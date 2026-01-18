@@ -262,17 +262,25 @@
     "test1": {
       "pet_type": "dragon",
       "pet_name": "bi béo",
-      "level": 1,
-      "health": 40,
+      "level": 2,
+      "health": 100,
       "mood": "happy",
       "total_care_count": 8,
-      "chat_count": 15,
+      "chat_count": 50,
       "days_at_100_health": 0,
-      "last_100_health_date": "2026-01-16",
-      "consecutive_days_100": 1,
-      "level_up_history": [],
+      "last_100_health_date": "2026-01-18",
+      "consecutive_days_100": 4,
+      "level_up_history": [
+        {
+          "from_level": 1,
+          "to_level": 2,
+          "timestamp": "2026-01-17T21:41:02.246629",
+          "days_taken": 3,
+          "chat_count": 50
+        }
+      ],
       "created_at": "2026-01-16T23:10:25.750753",
-      "last_updated": "2026-01-17T00:33:49.141964"
+      "last_updated": "2026-01-18T12:53:37.963804"
     },
     "minh": {
       "pet_type": "capybara",
@@ -341,5 +349,6 @@
         "completed_at": "2026-01-16T23:55:54.669306"
       }
     ]
-  }
+  },
+  "level_up_notification": {}
 }
