@@ -18,6 +18,5 @@ instance/
 # Uploads (nếu không muốn đẩy ảnh lên git)
 
 # Data files (tùy chọn)
-users.json
-data.json
+
 ```

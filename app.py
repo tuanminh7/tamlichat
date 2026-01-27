@@ -625,8 +625,40 @@ def teacher_dashboard():
     
     total_students = len(users.get('students', {}))
     
+    # FIX: Tính những học sinh CHƯA có conversation = normal
+    all_student_ids = set(users.get('students', {}).keys())
+    students_with_conversations = set(data['conversations'].keys())
+    students_without_conversations = all_student_ids - students_with_conversations
+    
+    # Thêm những em chưa chat vào normal
+    for student_id in students_without_conversations:
+        stats['normal'] += 1
+        student_data = {
+            'id': student_id,
+            'info': users['students'].get(student_id),
+            'status_count': {},
+            'keywords': {},
+            'last_message_time': None,
+            'total_messages': 0,
+            'alert_reason': None
+        }
+        students_by_status['normal'].append(student_data)
+    
+    # Xử lý những em ĐÃ có conversation
     for student_id, conversations in data['conversations'].items():
         if not conversations:
+            # Có key nhưng rỗng → cũng là normal
+            stats['normal'] += 1
+            student_data = {
+                'id': student_id,
+                'info': users['students'].get(student_id),
+                'status_count': {},
+                'keywords': {},
+                'last_message_time': None,
+                'total_messages': 0,
+                'alert_reason': None
+            }
+            students_by_status['normal'].append(student_data)
             continue
         
         recent_conversations = conversations[-10:]
