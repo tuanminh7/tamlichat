@@ -111,7 +111,7 @@ def analyze_mental_state(message, conversation_history):
                 f"[{idx}] Học sinh: {student_msg}\n"
                 f"    Bot: {bot_response}\n"
                 f"    Tâm trạng: {status}"
-                f"{f' | Từ khóa: {', '.join(keywords)}' if keywords else ''}"
+                f"{(' | Từ khóa: ' + ', '.join(keywords)) if keywords else ''}"
             )
         
         history_context = "\n".join(context_lines)
