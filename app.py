@@ -3,7 +3,7 @@ from functools import wraps
 import json
 from datetime import datetime
 import hashlib
-import google.generativeai as genai
+from google import genai
 from dotenv import load_dotenv
 import os
 import time
@@ -17,15 +17,23 @@ app = Flask(__name__,
 app.secret_key = 'your-secret-key-here-change-this'
 
 GEMINI_API_KEY = os.getenv('GEMINI_API_KEY')
+GEMINI_MODEL = os.getenv('GEMINI_MODEL', 'gemini-2.5-flash')
 
 if not GEMINI_API_KEY:
     raise ValueError(" GEMINI_API_KEY không được tìm thấy trong file .env!")
 
-genai.configure(api_key=GEMINI_API_KEY)
-model = genai.GenerativeModel('gemini-2.5-flash')
+client = genai.Client(api_key=GEMINI_API_KEY)
 
 USERS_FILE = 'users.json'
 DATA_FILE = 'data.json'
+
+
+def generate_text(prompt):
+    response = client.models.generate_content(
+        model=GEMINI_MODEL,
+        contents=prompt,
+    )
+    return (response.text or "").strip()
 
 def init_data():
     if not os.path.exists(USERS_FILE):
@@ -77,6 +85,9 @@ def load_data():
 def save_data(data):
     with open(DATA_FILE, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
+
+
+init_data()
 
 def login_required(f):
     @wraps(f)
@@ -196,8 +207,7 @@ CHÚ Ý LIÊN KẾT:
     
     for attempt in range(max_retries):
         try:
-            response = model.generate_content(prompt)
-            response_text = response.text.strip()
+            response_text = generate_text(prompt)
             
             
             response_text = response_text.replace('```json', '').replace('```', '').strip()
@@ -316,8 +326,7 @@ QUY TẮC:
 """
     
     try:
-        response = model.generate_content(simple_prompt)
-        ai_response = response.text.strip()
+        ai_response = generate_text(simple_prompt)
         
         # Validate response có ý nghĩa
         if len(ai_response) < 10 or len(ai_response) > 1000:
@@ -462,6 +471,16 @@ def index():
         elif role == 'teacher':
             return redirect(url_for('teacher_dashboard'))
     return redirect(url_for('login'))
+
+
+@app.route('/healthz')
+def healthz():
+    return jsonify({'status': 'ok'}), 200
+
+
+@app.route('/favicon.ico')
+def favicon():
+    return app.send_static_file('images/anh1.png')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -1204,5 +1223,4 @@ def test_pet_viewer():
     return render_template('test_pet.html')
 
 if __name__ == '__main__':
-    init_data()
     app.run(debug=True)
